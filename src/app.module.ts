@@ -12,6 +12,8 @@ import { VacancyCategory } from './vacancy/models/category.model';
 import { Vacancy } from './vacancy/models/vacancy.model';
 import { SupportModule } from './support/support.module';
 import { Apeal } from './support/models/apeal.model';
+import { ResponseModule } from './response/response.module';
+import { ResponseModel } from './response/models/response.model';
 
 @Module({
   imports: [
@@ -25,7 +27,7 @@ import { Apeal } from './support/models/apeal.model';
       username: process.env.DB_USERNAME,
       password: String(process.env.DB_PASSWORD),
       database: process.env.DB_NAME,
-      models: [User, Articles, VacancyCategory, Vacancy, Apeal],
+      models: [User, Articles, VacancyCategory, Vacancy, Apeal, ResponseModel],
       autoLoadModels: true,
       synchronize: true,
       sync: {
@@ -37,6 +39,7 @@ import { Apeal } from './support/models/apeal.model';
     ArticlesModule,
     VacancyModule,
     SupportModule,
+    ResponseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
