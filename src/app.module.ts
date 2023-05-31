@@ -10,6 +10,8 @@ import { Articles } from './articles/articles.model';
 import { VacancyModule } from './vacancy/vacancy.module';
 import { VacancyCategory } from './vacancy/models/category.model';
 import { Vacancy } from './vacancy/models/vacancy.model';
+import { SupportModule } from './support/support.module';
+import { Apeal } from './support/models/apeal.model';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { Vacancy } from './vacancy/models/vacancy.model';
       username: process.env.DB_USERNAME,
       password: String(process.env.DB_PASSWORD),
       database: process.env.DB_NAME,
-      models: [User, Articles, VacancyCategory, Vacancy],
+      models: [User, Articles, VacancyCategory, Vacancy, Apeal],
       autoLoadModels: true,
       synchronize: true,
       sync: {
@@ -34,6 +36,7 @@ import { Vacancy } from './vacancy/models/vacancy.model';
     AuthModule,
     ArticlesModule,
     VacancyModule,
+    SupportModule,
   ],
   controllers: [AppController],
   providers: [AppService],
