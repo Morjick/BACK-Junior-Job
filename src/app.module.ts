@@ -14,6 +14,7 @@ import { SupportModule } from './support/support.module';
 import { Apeal } from './support/models/apeal.model';
 import { ResponseModule } from './response/response.module';
 import { ResponseModel } from './response/models/response.model';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ResponseModel } from './response/models/response.model';
     VacancyModule,
     SupportModule,
     ResponseModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
