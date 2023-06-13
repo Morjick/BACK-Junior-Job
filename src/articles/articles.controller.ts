@@ -41,7 +41,7 @@ export class ArticlesController {
     return await this.articlesReposity.getMany(param, res);
   }
 
-  @Get('get-product/:href')
+  @Get('get-article/:href')
   @ApiParam({ name: 'href', type: String })
   async getProduct(@Param() param, @Res() res) {
     return await this.articlesReposity.getArticle(param.href, res);

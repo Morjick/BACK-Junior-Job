@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Headers,
   Query,
   Res,
   UseGuards,
@@ -25,6 +26,11 @@ export class AuthController {
   @Post('sing-in')
   async singIn(@Body() body, @Res() res) {
     return await this.authReposity.singIn(body, res);
+  }
+
+  @Post('check-token')
+  async checkToken(@Headers() headers, @Res() res) {
+    return await this.authReposity.checkToken(headers, res);
   }
 
   @Get('get-user/:id')

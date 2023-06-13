@@ -5,7 +5,6 @@ import { validationPassword } from 'src/vendor/validationPassword';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
-import { getAutor } from 'src/vendor/getAutor';
 
 @Injectable()
 export class AuthService {
@@ -36,9 +35,10 @@ export class AuthService {
         return res.status(300).json(isPasswordValid);
       }
       const hashPassword = await bcrypt.hash(body.password, 10);
+      console.log(body.implication);
 
-      if (body.implication !== 'legal' || body.implication !== 'psyhical') {
-        return res.status(300).join({
+      if (body.implication !== 'legal' && body.implication !== 'physical') {
+        return res.status(300).json({
           message: 'Укажите, вы физическое или юридическое лицо',
           ok: false,
         });
@@ -71,42 +71,7 @@ export class AuthService {
         ok: true,
       });
     } catch (e) {
-      return res.status(501).json({
-        message: 'Неожиданная ошиюка сервера',
-        ok: false,
-        error: e,
-      });
-    }
-  }
-
-  async aprooveUser(id, headers, res) {
-    try {
-      const autor = await getAutor(headers);
-
-      if (!autor.ok) {
-        return res.status(autor.status).json({
-          ok: false,
-          message: 'Не удалось установить модератора',
-        });
-      }
-
-      const user = await this.userReposity.findOne({ where: { id } });
-
-      if (!user) {
-        return res.status(404).json({
-          message: 'Не удалось найти пользователя',
-          ok: false,
-        });
-      }
-
-      await this.userReposity.update({ modarate: true }, { where: { id } });
-      user.$set('modarator', autor.id);
-
-      return {
-        ok: true,
-        message: 'Пользователь одобрен',
-      };
-    } catch (e) {
+      console.warn(e);
       return res.status(501).json({
         message: 'Неожиданная ошиюка сервера',
         ok: false,
@@ -142,6 +107,7 @@ export class AuthService {
           id: candidate.id,
           name: candidate.firstname,
           lastname: candidate.lastname,
+          role: candidate.role,
         },
         {
           secret: process.env.JWT_SECRET_KEY,
@@ -153,6 +119,47 @@ export class AuthService {
         message: 'Успешно',
         ok: true,
         token,
+        user: candidate,
+      });
+    } catch (e) {
+      return res.status(501).json({
+        message: 'Неожиданная ошиюка сервера',
+        ok: false,
+        error: e,
+      });
+    }
+  }
+
+  async checkToken(headers, res) {
+    try {
+      const bearer = String(headers.authorization).split(' ')[1];
+
+      if (!bearer) {
+        return res.status(501).json({
+          message: 'Необходимо авторизоваться',
+          ok: false,
+          status: 401,
+        });
+      }
+
+      const { id } = this.jwt.verify(bearer, {
+        secret: process.env.JWT_SECRET_KEY,
+      });
+
+      if (!id) {
+        return res.status(401).json({
+          message: 'Не удалось подтвердить авторизацию',
+          ok: false,
+          status: 401,
+        });
+      }
+
+      const user = await this.userReposity.findOne({ where: { id } });
+
+      return res.status(200).json({
+        message: 'Авторизация подтверждена',
+        ok: true,
+        user,
       });
     } catch (e) {
       return res.status(501).json({

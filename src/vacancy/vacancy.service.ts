@@ -96,6 +96,7 @@ export class VacancyService {
         vacancy,
       });
     } catch (e) {
+      console.log(e);
       return res.status(501).json({
         message: 'Неожиданная ошибка сервера',
         ok: false,

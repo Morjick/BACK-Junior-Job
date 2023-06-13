@@ -120,13 +120,14 @@ export class ArticlesService {
         offset,
         where: {
           show: true,
-          name: {
+          title: {
             [Op.like]: `%${title}%`,
           },
         },
         order: sort == 'new' ? [['createdAt', 'ASC']] : [['createdAt', 'DESC']],
         include: { all: true },
       });
+      console.log(articles);
 
       const count = await this.articlesReposity.count({
         where: { show: true },
@@ -135,7 +136,7 @@ export class ArticlesService {
       const nextPageAvaible = pages > 1 ? true : false;
 
       return res.status(200).json({
-        message: 'Продукты получены',
+        message: 'Статьи получены',
         ok: true,
         articles,
         pages,
