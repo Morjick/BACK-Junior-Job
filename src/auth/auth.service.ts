@@ -35,7 +35,6 @@ export class AuthService {
         return res.status(300).json(isPasswordValid);
       }
       const hashPassword = await bcrypt.hash(body.password, 10);
-      console.log(body.implication);
 
       if (body.implication !== 'legal' && body.implication !== 'physical') {
         return res.status(300).json({

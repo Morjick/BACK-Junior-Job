@@ -21,6 +21,10 @@ export class ArticlesController {
 
   @Post('create')
   @UseGuards(AdminGuard)
+  @ApiParam({ name: 'title', type: String })
+  @ApiParam({ name: 'body', type: String })
+  @ApiParam({ name: 'avatar', type: String })
+  @ApiParam({ name: 'show', type: Boolean })
   async createProduct(@Body() body: any, @Headers() headers, @Res() res) {
     return await this.articlesReposity.create(body, headers, res);
   }
@@ -33,10 +37,10 @@ export class ArticlesController {
   }
 
   @Get('get-many')
-  @ApiQuery({ name: 'limit', type: Number })
-  @ApiQuery({ name: 'offset', type: Number })
-  @ApiQuery({ name: 'sort', type: String })
-  @ApiQuery({ name: 'title', type: String })
+  @ApiQuery({ name: 'limit', type: Number, required: false })
+  @ApiQuery({ name: 'offset', type: Number, required: false })
+  @ApiQuery({ name: 'sort', type: String, required: false })
+  @ApiQuery({ name: 'title', type: String, required: false })
   async getMany(@Query() param, @Res() res) {
     return await this.articlesReposity.getMany(param, res);
   }

@@ -55,7 +55,7 @@ export class ResponseService {
       const { targetId } = params;
 
       const responses = await this.responseReposity.findAll({
-        where: { targetId },
+        where: { id: targetId },
       });
 
       return res.status(200).json({

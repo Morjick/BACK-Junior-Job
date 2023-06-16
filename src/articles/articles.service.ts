@@ -4,6 +4,7 @@ import { Articles } from './articles.model';
 import { getAutor } from 'src/vendor/getAutor';
 import getTransplit from 'src/vendor/getTransplit';
 import { Op } from 'sequelize';
+import { CreateArticlesDto } from './dto/create-articles.dto';
 
 @Injectable()
 export class ArticlesService {
@@ -11,7 +12,7 @@ export class ArticlesService {
     @InjectModel(Articles) private articlesReposity: typeof Articles,
   ) {}
 
-  async create(data, headers, res) {
+  async create(data: CreateArticlesDto, headers, res) {
     try {
       const autor = await getAutor(headers);
 

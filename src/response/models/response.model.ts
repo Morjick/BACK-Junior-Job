@@ -21,6 +21,9 @@ export class ResponseModel extends Model {
   })
   id: number;
 
+  @ApiProperty({ type: DataType.TEXT })
+  body: string;
+
   @BelongsTo(() => User)
   autor: User;
 

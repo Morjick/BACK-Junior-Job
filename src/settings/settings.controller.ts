@@ -1,13 +1,5 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Headers,
-  Post,
-  Query,
-  Res,
-} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Post, Res } from '@nestjs/common';
+import { ApiHeader, ApiParam, ApiTags } from '@nestjs/swagger';
 import { SettingsService } from './settings.service';
 
 @ApiTags('Настройки')
@@ -16,7 +8,11 @@ export class SettingsController {
   constructor(private settingReposity: SettingsService) {}
 
   @Post('change-password')
-  async changePassword(@Body() body, @Headers() Headers, @Res() res) {
+  @ApiHeader({ name: 'Authorization', description: 'Bearer token' })
+  @ApiParam({ name: 'email', type: String })
+  @ApiParam({ name: 'password', type: String })
+  @ApiParam({ name: 'newPassword', type: String })
+  async changePassword(@Body() body, @Res() res) {
     return await this.settingReposity.changePassword(body, res);
   }
 }

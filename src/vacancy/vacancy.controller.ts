@@ -10,7 +10,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { VacancyService } from './vacancy.service';
 import { AdminGuard } from 'src/guards/admin.guards';
 
@@ -21,12 +21,18 @@ export class VacancyController {
 
   @Post('create-category')
   @UseGuards(AdminGuard)
+  @ApiParam({ name: 'title', type: String })
+  @ApiParam({ name: 'icon', type: String })
   async createCategory(@Body() body: any, @Res() res) {
     return await this.vacancyReposity.createCategory(body, res);
   }
 
   @Post('create-vacancy')
   @UseGuards(AdminGuard)
+  @ApiParam({ name: 'title', type: String })
+  @ApiParam({ name: 'avatar', type: String })
+  @ApiParam({ name: 'category', type: Number, description: 'Category id' })
+  @ApiParam({ name: 'show', type: Boolean })
   async createVacancy(@Body() body: any, @Headers() headers, @Res() res) {
     return await this.vacancyReposity.createVacancy(body, headers, res);
   }
@@ -50,11 +56,18 @@ export class VacancyController {
   }
 
   @Get('get-many')
+  @ApiQuery({
+    name: 'category',
+    type: Number,
+    description: 'Category id',
+    required: false,
+  })
   async getVacancies(@Res() res, @Query() param) {
     return await this.vacancyReposity.getVacancies(param.category, res);
   }
 
   @Get('get-vacance/:href')
+  @ApiQuery({ name: 'href', type: String })
   async getVacancy(@Res() res, @Param() param) {
     return await this.vacancyReposity.getVacancy(param.href, res);
   }
