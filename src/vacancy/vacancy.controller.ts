@@ -13,6 +13,7 @@ import {
 import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { VacancyService } from './vacancy.service';
 import { AdminGuard } from 'src/guards/admin.guards';
+import { SearchVacanciesDto } from './dto/vacancy.getVacancies-dto'
 
 @ApiTags('Вакансии')
 @Controller('vacancy')
@@ -57,6 +58,17 @@ export class VacancyController {
 
   @Get('get-many')
   @ApiQuery({
+    name: 'category',
+    type: Number,
+    description: 'Category id',
+    required: false,
+  })
+  async getVacancies(@Res() res, @Query() param) {
+    return await this.vacancyReposity.getVacancies(param.category, res);
+  }
+
+  @Get('search')
+  @ApiQuery({
     name: 'sortColumn',
     type: String,
     description: 'Поле модели по которому необходимо сортировать',
@@ -74,9 +86,9 @@ export class VacancyController {
   })
   @ApiQuery({ name: 'offset', type: String, description: 'Номер страницы' })
   @ApiQuery({ name: 'title', type: String, description: 'Поисковый запрос' })
-  @ApiQuery({ name: 'categoryId', type: String, description: 'Id категори' })
-  async getVacancies(@Res() res, @Query() query) {
-    return await this.vacancyReposity.getVacancies(query, res);
+  @ApiQuery({ name: 'category', type: String, description: 'Id категори' })
+  async searchVacancies(@Res() res, @Query() query: SearchVacanciesDto) {
+    return await this.vacancyReposity.searchVacancies(query, res);
   }
 
   @Get('get-vacance/:href')

@@ -7,6 +7,12 @@ export class AppController {
 
   @Get()
   getDocumentation(@Res() res): string {
-    return res.status(200).redirect('/api');
+    return res
+      .status(200)
+      .json({
+        pelmeniReceipt:
+          'Обжариваем пелемени до корочки на большом огне. Добавляем соевый и другие любимые соусы, приправы. Также добавляем 100мл воды и закрываем крышкой на пару минут. Открвыем крышку, выпариваем воду до конца. Поздравляю, богические пельмени готовы!',
+      })
+      .redirect('/api');
   }
 }

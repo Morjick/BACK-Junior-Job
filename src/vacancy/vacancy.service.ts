@@ -159,7 +159,32 @@ export class VacancyService {
     }
   }
 
-  async getVacancies(query: any, res: any) {
+  async getVacancies(category, res) {
+    try {
+      let vacancy = [];
+      if (category) {
+        vacancy = await this.vacancyReposity.findAll({
+          where: { categoryId: category },
+        });
+      } else {
+        vacancy = await this.vacancyReposity.findAll();
+      }
+
+      return res.status(200).json({
+        message: 'Категории найдены',
+        ok: true,
+        vacancy,
+      });
+    } catch (e) {
+      return res.status(501).json({
+        message: 'Неожиданная ошибка сервера',
+        ok: false,
+        error: e,
+      });
+    }
+  }
+
+  async searchVacancies(query: any, res: any) {
     try {
       const {
         sortColumn = 'createdAt',
@@ -167,13 +192,13 @@ export class VacancyService {
         limit = 50,
         offset = 0,
         title = '',
-        categoryId = null,
+        category = null,
       } = query;
       const vacancies = await this.vacancyReposity.findAll({
         limit,
         offset,
-        where: categoryId
-          ? { categoryId, title: { [Op.like]: `%${title}%` } }
+        where: category
+          ? { category, title: { [Op.like]: `%${title}%` } }
           : { title: { [Op.like]: `%${title}%` } },
         order: [[sortColumn, sortBy]],
       });
