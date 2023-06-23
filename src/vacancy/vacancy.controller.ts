@@ -56,12 +56,25 @@ export class VacancyController {
   }
 
   @Get('get-many')
-  @ApiQuery({name: 'sortColumn', type: String, description: 'Поле модели по которому необходимо сортировать',})
-  @ApiQuery({name: 'sortBy', type: String, description: 'Направление сортировки', enum: ['ASC', 'DESC']})
-  @ApiQuery({name: 'limit', type: String, description: 'Количество возвращаемых вакансий',})
-  @ApiQuery({name: 'offset', type: String, description: 'Номер страницы',})
-  @ApiQuery({name: 'title', type: String, description: 'Поисковый запрос',})
-  @ApiQuery({name: 'categoryId', type: String, description: 'Id категори',})
+  @ApiQuery({
+    name: 'sortColumn',
+    type: String,
+    description: 'Поле модели по которому необходимо сортировать',
+  })
+  @ApiQuery({
+    name: 'sortBy',
+    type: String,
+    description: 'Направление сортировки',
+    enum: ['ASC', 'DESC'],
+  })
+  @ApiQuery({
+    name: 'limit',
+    type: String,
+    description: 'Количество возвращаемых вакансий',
+  })
+  @ApiQuery({ name: 'offset', type: String, description: 'Номер страницы' })
+  @ApiQuery({ name: 'title', type: String, description: 'Поисковый запрос' })
+  @ApiQuery({ name: 'categoryId', type: String, description: 'Id категори' })
   async getVacancies(@Res() res, @Query() query) {
     return await this.vacancyReposity.getVacancies(query, res);
   }

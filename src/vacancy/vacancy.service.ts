@@ -4,8 +4,7 @@ import { VacancyCategory } from './models/category.model';
 import getTransplit from 'src/vendor/getTransplit';
 import { getAutor } from 'src/vendor/getAutor';
 import { Vacancy } from './models/vacancy.model';
-import { Op } from 'sequelize'
-import { Response } from '@nestjs/common'
+import { Op } from 'sequelize';
 
 @Injectable()
 export class VacancyService {
@@ -160,27 +159,36 @@ export class VacancyService {
     }
   }
 
-  async getVacancies(param: any, res: any) {
+  async getVacancies(query: any, res: any) {
     try {
-      const { sortColumn='createdAt', sortBy='ASC', limit=50, offset=0, title='', categoryId=null } = param
+      const {
+        sortColumn = 'createdAt',
+        sortBy = 'ASC',
+        limit = 50,
+        offset = 0,
+        title = '',
+        categoryId = null,
+      } = query;
       const vacancies = await this.vacancyReposity.findAll({
         limit,
         offset,
-        where: categoryId ? { categoryId, title: {[Op.like]: `%${title}%`} } : { title: {[Op.like]: `%${title}%`} },
-        order: [[sortColumn, sortBy]]
-      })
+        where: categoryId
+          ? { categoryId, title: { [Op.like]: `%${title}%` } }
+          : { title: { [Op.like]: `%${title}%` } },
+        order: [[sortColumn, sortBy]],
+      });
 
       return res.status(200).json({
         message: 'Вакансии найдены',
         ok: true,
-        vacancies
-      })
-    } catch(e) {
+        vacancies,
+      });
+    } catch (e) {
       return res.status(501).json({
         message: 'Неожиданная ошибка сервера',
         ok: false,
         error: e,
-      })
+      });
     }
   }
 }
