@@ -34,7 +34,7 @@ import { SettingsModule } from './settings/settings.module';
       sync: {
         alter: true,
       },
-      logging: false,
+      logging: true,
     }),
     AuthModule,
     ArticlesModule,
