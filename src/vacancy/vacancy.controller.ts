@@ -59,16 +59,16 @@ export class VacancyController {
     );
   }
 
-  @Delete('delete-category/:id')
+  @Delete('delete-category')
   @UseGuards(AdminGuard)
   @ApiQuery({ name: 'id', type: Number })
-  async deleteArticles(@Param() params, @Res() res) {
+  async deleteArticles(@Query() params, @Res() res) {
     return await this.vacancyReposity.deleteCategory(params.id, res);
   }
 
-  @Delete('delete-vacancy/:id')
+  @Delete('delete-vacancy')
   @ApiQuery({ name: 'id', type: Number })
-  async deleteVacancy(@Param() params, @Res() res) {
+  async deleteVacancy(@Query() params, @Res() res) {
     return await this.vacancyReposity.deleteVacancy(params.id, res);
   }
 
