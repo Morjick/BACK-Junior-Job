@@ -13,7 +13,8 @@ import {
 } from '@nestjs/common';
 import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { VacancyService } from './vacancy.service';
-import { AdminGuard } from '../guards/admin.guards';
+import { AdminGuard } from 'src/guards/admin.guards';
+import { SearchVacanciesDto } from './dto/vacancy.getVacancies-dto'
 
 @ApiTags('Вакансии')
 @Controller('vacancy')
@@ -62,13 +63,13 @@ export class VacancyController {
   @Delete('delete-category')
   @UseGuards(AdminGuard)
   @ApiQuery({ name: 'id', type: Number })
-  async deleteArticles(@Query() params, @Res() res) {
+  async deleteArticles(@Param() params, @Res() res) {
     return await this.vacancyReposity.deleteCategory(params.id, res);
   }
 
-  @Delete('delete-vacancy')
+  @Delete('delete-vacancy/:id')
   @ApiQuery({ name: 'id', type: Number })
-  async deleteVacancy(@Query() params, @Res() res) {
+  async deleteVacancy(@Param() params, @Res() res) {
     return await this.vacancyReposity.deleteVacancy(params.id, res);
   }
 
@@ -86,6 +87,30 @@ export class VacancyController {
   })
   async getVacancies(@Res() res, @Query() param) {
     return await this.vacancyReposity.getVacancies(param.category, res);
+  }
+
+  @Get('search')
+  @ApiQuery({
+    name: 'sortColumn',
+    type: String,
+    description: 'Поле модели по которому необходимо сортировать',
+  })
+  @ApiQuery({
+    name: 'sortBy',
+    type: String,
+    description: 'Направление сортировки',
+    enum: ['ASC', 'DESC'],
+  })
+  @ApiQuery({
+    name: 'limit',
+    type: String,
+    description: 'Количество возвращаемых вакансий',
+  })
+  @ApiQuery({ name: 'offset', type: String, description: 'Номер страницы' })
+  @ApiQuery({ name: 'title', type: String, description: 'Поисковый запрос' })
+  @ApiQuery({ name: 'category', type: String, description: 'Id категори' })
+  async searchVacancies(@Res() res, @Query() query: SearchVacanciesDto) {
+    return await this.vacancyReposity.searchVacancies(query, res);
   }
 
   @Get('get-vacance/:href')

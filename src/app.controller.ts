@@ -7,6 +7,8 @@ export class AppController {
 
   @Get()
   getDocumentation(@Res() res): string {
-    return res.status(200).redirect('/api');
+    return res
+      .status(200)
+      .redirect('/api');
   }
 }
