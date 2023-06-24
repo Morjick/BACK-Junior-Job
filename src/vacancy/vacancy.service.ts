@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { VacancyCategory } from './models/category.model';
-import getTransplit from 'src/vendor/getTransplit';
-import { getAutor } from 'src/vendor/getAutor';
+import getTransplit from '../vendor/getTransplit';
+import { getAutor } from '../vendor/getAutor';
 import { Vacancy } from './models/vacancy.model';
 
 @Injectable()
 export class VacancyService {
   constructor(
-    @InjectModel(VacancyCategory)
-    private vacancyCategoryReposity: typeof VacancyCategory,
     @InjectModel(Vacancy)
     private vacancyReposity: typeof Vacancy,
+    @InjectModel(VacancyCategory)
+    private vacancyCategoryReposity: typeof VacancyCategory,
   ) {}
 
   async createCategory(body, res) {
@@ -68,7 +68,6 @@ export class VacancyService {
   async createVacancy(body, headers, res) {
     try {
       const { id } = await getAutor(headers);
-
       const isAlreadyCategory = await this.vacancyCategoryReposity.findOne({
         where: { id: body.category },
       });
@@ -105,10 +104,56 @@ export class VacancyService {
     }
   }
 
+  async updateVacancy(vacancyId, body, headers, res) {
+    try {
+      const vacancy = await this.vacancyReposity.findByPk(vacancyId);
+      const { id } = await getAutor(headers);
+      const isAlreadyCategory = await this.vacancyCategoryReposity.findOne({
+        where: { id: body.category },
+      });
+
+      if (!isAlreadyCategory) {
+        return res.status(301).json({
+          message: 'Укажите, пожалуйста, категорию вакансии',
+          ok: false,
+        });
+      }
+      // if (id != vacancy.autorId){
+      //   console.log(id + ' ' + vacancy.autorId)
+      //   return res.status(403).json({
+      //     message: 'Вы не можете изменить эту вакансию!',
+      //     ok: false,
+      //   });
+      // }
+
+      const hrefBody = await getTransplit(body.title);
+
+      await vacancy.update({
+        ...body,
+        categoryId: isAlreadyCategory.id,
+        autorId: id,
+        show: true,
+        hrefBody,
+      });
+
+      return res.status(200).json({
+        message: 'Успешно создана',
+        ok: true,
+        vacancy,
+      });
+    } catch (e) {
+      console.log(e);
+      return res.status(501).json({
+        message: 'Неожиданная ошибка сервера',
+        ok: false,
+        error: e,
+      });
+    }
+  }
+
   async deleteVacancy(id, res) {
     try {
       await this.vacancyReposity.destroy({ where: { id } });
-
       return res.status(200).json({
         message: 'Вакансия удалена',
         ok: true,
