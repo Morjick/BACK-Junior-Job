@@ -6,13 +6,14 @@ import {
   Headers,
   Param,
   Post,
+  Put,
   Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
 import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { VacancyService } from './vacancy.service';
-import { AdminGuard } from 'src/guards/admin.guards';
+import { AdminGuard } from '../guards/admin.guards';
 
 @ApiTags('Вакансии')
 @Controller('vacancy')
@@ -37,16 +38,37 @@ export class VacancyController {
     return await this.vacancyReposity.createVacancy(body, headers, res);
   }
 
-  @Delete('delete-category')
+  @Put('update-vacancy/:id')
+  @UseGuards(AdminGuard)
+  @ApiParam({ name: 'title', type: String })
+  @ApiParam({ name: 'avatar', type: String })
+  @ApiParam({ name: 'category', type: Number, description: 'Category id' })
+  @ApiParam({ name: 'show', type: Boolean })
+  @ApiQuery({ name: 'id', type: Number })
+  async updateVacancy(
+    @Body() body: any,
+    @Headers() headers,
+    @Res() res,
+    @Param() params,
+  ) {
+    return await this.vacancyReposity.updateVacancy(
+      params.id,
+      body,
+      headers,
+      res,
+    );
+  }
+
+  @Delete('delete-category/:id')
   @UseGuards(AdminGuard)
   @ApiQuery({ name: 'id', type: Number })
-  async deleteArticles(@Query() params, @Res() res) {
+  async deleteArticles(@Param() params, @Res() res) {
     return await this.vacancyReposity.deleteCategory(params.id, res);
   }
 
-  @Delete('delete-vacancy')
+  @Delete('delete-vacancy/:id')
   @ApiQuery({ name: 'id', type: Number })
-  async deleteVacancy(@Query() params, @Res() res) {
+  async deleteVacancy(@Param() params, @Res() res) {
     return await this.vacancyReposity.deleteVacancy(params.id, res);
   }
 
