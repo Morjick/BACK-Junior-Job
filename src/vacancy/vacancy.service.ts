@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { VacancyCategory } from './models/category.model';
-import getTransplit from '../vendor/getTransplit';
-import { getAutor } from '../vendor/getAutor';
+import getTransplit from 'src/vendor/getTransplit';
+import { getAutor } from 'src/vendor/getAutor';
 import { Vacancy } from './models/vacancy.model';
 
 @Injectable()
@@ -108,32 +108,12 @@ export class VacancyService {
     try {
       const vacancy = await this.vacancyReposity.findByPk(vacancyId);
       const { id } = await getAutor(headers);
-      const isAlreadyCategory = await this.vacancyCategoryReposity.findOne({
-        where: { id: body.category },
-      });
-
-      if (!isAlreadyCategory) {
-        return res.status(301).json({
-          message: 'Укажите, пожалуйста, категорию вакансии',
-          ok: false,
-        });
-      }
-      // if (id != vacancy.autorId){
-      //   console.log(id + ' ' + vacancy.autorId)
-      //   return res.status(403).json({
-      //     message: 'Вы не можете изменить эту вакансию!',
-      //     ok: false,
-      //   });
-      // }
-
-      const hrefBody = await getTransplit(body.title);
-
+      const categoryId = body.category;
       await vacancy.update({
         ...body,
-        categoryId: isAlreadyCategory.id,
+        categoryId,
         autorId: id,
         show: true,
-        hrefBody,
       });
 
       return res.status(200).json({
@@ -142,7 +122,6 @@ export class VacancyService {
         vacancy,
       });
     } catch (e) {
-      console.log(e);
       return res.status(501).json({
         message: 'Неожиданная ошибка сервера',
         ok: false,
