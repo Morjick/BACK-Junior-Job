@@ -4,6 +4,7 @@ import { VacancyCategory } from './models/category.model';
 import getTransplit from 'src/vendor/getTransplit';
 import { getAutor } from 'src/vendor/getAutor';
 import { Vacancy } from './models/vacancy.model';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class VacancyService {
@@ -164,6 +165,24 @@ export class VacancyService {
     }
   }
 
+  async getVacancy(href, res) {
+    try {
+      const vacancy = await this.vacancyReposity.findOne({ where: { href } });
+
+      return res.status(200).json({
+        message: 'Категории найдены',
+        ok: true,
+        vacancy,
+      });
+    } catch (e) {
+      return res.status(501).json({
+        message: 'Неожиданная ошибка сервера',
+        ok: false,
+        error: e,
+      });
+    }
+  }
+
   async getVacancies(category, res) {
     try {
       let vacancy = [];
@@ -189,14 +208,29 @@ export class VacancyService {
     }
   }
 
-  async getVacancy(href, res) {
+  async searchVacancies(query: any, res: any) {
     try {
-      const vacancy = await this.vacancyReposity.findOne({ where: { href } });
+      const {
+        sortColumn = 'createdAt',
+        sortBy = 'ASC',
+        limit = 50,
+        offset = 0,
+        title = '',
+        category = null,
+      } = query;
+      const vacancies = await this.vacancyReposity.findAll({
+        limit,
+        offset,
+        where: category
+          ? { category, title: { [Op.like]: `%${title}%` } }
+          : { title: { [Op.like]: `%${title}%` } },
+        order: [[sortColumn, sortBy]],
+      });
 
       return res.status(200).json({
-        message: 'Категории найдены',
+        message: 'Вакансии найдены',
         ok: true,
-        vacancy,
+        vacancies,
       });
     } catch (e) {
       return res.status(501).json({
