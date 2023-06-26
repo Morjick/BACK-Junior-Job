@@ -1,22 +1,22 @@
-import { IsString, IsEnum, IsNumber } from 'class-validator'
+import { IsString, IsEnum, IsNumber } from 'class-validator';
 
 export class SearchVacanciesDto {
-    @IsString()
-    sortColumn: string;
+  @IsString()
+  sortColumn: string;
 
-    @IsString()
-    @IsEnum(['ASC', 'DESC'])
-    sortBy: string;
+  @IsString()
+  @IsEnum(['ASC', 'DESC'])
+  sortBy: string;
 
-    @IsNumber()
-    limit: number;
+  @IsNumber()
+  limit: number;
 
-    @IsNumber()
-    offset: number;
+  @IsNumber()
+  offset: number;
 
-    @IsString()
-    title: string;
+  @IsString()
+  title: string;
 
-    @IsNumber()
-    category: number;
+  @IsNumber()
+  category: number;
 }

@@ -6,6 +6,7 @@ import {
   Headers,
   Param,
   Post,
+  Put,
   Query,
   Res,
   UseGuards,
@@ -27,6 +28,17 @@ export class ArticlesController {
   @ApiParam({ name: 'show', type: Boolean })
   async createProduct(@Body() body: any, @Headers() headers, @Res() res) {
     return await this.articlesReposity.create(body, headers, res);
+  }
+
+  @Put('update')
+  @UseGuards(AdminGuard)
+  @ApiParam({ name: 'title', type: String })
+  @ApiParam({ name: 'body', type: String })
+  @ApiParam({ name: 'avatar', type: Number, description: 'Category id' })
+  @ApiParam({ name: 'show', type: Boolean })
+  @ApiQuery({ name: 'id', type: Number })
+  async updateAtricle(@Body() body: any, @Query() params, @Res() res) {
+    return await this.articlesReposity.updateArticle(params.id, body, res);
   }
 
   @Delete('delete-article')
