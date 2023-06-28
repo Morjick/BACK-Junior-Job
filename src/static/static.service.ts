@@ -30,7 +30,16 @@ export class StaticService {
 
   postImage(file: Express.Multer.File, res: any) {
     try {
-      return res.status(200);
+      const image = {
+        name: file.filename,
+        size: file.size,
+      }
+
+      return res.status(200).json({
+        message: 'Изображение загружено',
+        ok: true,
+        image,
+      });
     } catch (e) {
       return res.status(501).json({
         message: 'Неожиданная ошиюка сервера',
