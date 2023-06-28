@@ -36,7 +36,7 @@ export class StaticController {
           const originalname = file.originalname
             .split('.')[0]
             .split(' ')
-            .join('');
+            .join('-');
           const transplitName = await getTransplit(originalname);
           const date = Date.now();
           const name = `${transplitName}-${date}.${

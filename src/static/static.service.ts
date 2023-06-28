@@ -21,7 +21,7 @@ export class StaticService {
       image.pipe(res);
     } catch (e) {
       return res.status(501).json({
-        message: 'Неожиданная ошиюка сервера',
+        message: 'Неожиданная ошибка сервера',
         ok: false,
         error: e,
       });
@@ -42,7 +42,7 @@ export class StaticService {
       });
     } catch (e) {
       return res.status(501).json({
-        message: 'Неожиданная ошиюка сервера',
+        message: 'Неожиданная ошибка сервера',
         ok: false,
         error: e,
       });
