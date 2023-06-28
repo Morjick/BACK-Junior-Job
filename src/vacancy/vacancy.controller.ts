@@ -10,7 +10,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { VacancyService } from './vacancy.service';
 import { AdminGuard } from 'src/guards/admin.guards';
 import { SearchVacanciesDto } from './dto/vacancy.getVacancies-dto';
