@@ -72,7 +72,7 @@ export class AuthService {
     } catch (e) {
       console.warn(e);
       return res.status(501).json({
-        message: 'Неожиданная ошиюка сервера',
+        message: 'Неожиданная ошибка сервера',
         ok: false,
         error: e,
       });
@@ -122,7 +122,7 @@ export class AuthService {
       });
     } catch (e) {
       return res.status(501).json({
-        message: 'Неожиданная ошиюка сервера',
+        message: 'Неожиданная ошибка сервера',
         ok: false,
         error: e,
       });
@@ -162,7 +162,7 @@ export class AuthService {
       });
     } catch (e) {
       return res.status(501).json({
-        message: 'Неожиданная ошиюка сервера',
+        message: 'Неожиданная ошибка сервера',
         ok: false,
         error: e,
       });
@@ -191,7 +191,7 @@ export class AuthService {
       });
     } catch (e) {
       return res.status(501).json({
-        message: 'Неожиданная ошиюка сервера',
+        message: 'Неожиданная ошибка сервера',
         ok: false,
         error: e,
       });
@@ -230,7 +230,7 @@ export class AuthService {
       });
     } catch (e) {
       return res.status(501).json({
-        message: 'Неожиданная ошиюка сервера',
+        message: 'Неожиданная ошибка сервера',
         ok: false,
         error: e,
       });
