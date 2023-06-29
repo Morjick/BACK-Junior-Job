@@ -33,7 +33,7 @@ export class StaticService {
       const image = {
         name: file.filename,
         size: file.size,
-      }
+      };
 
       return res.status(200).json({
         message: 'Изображение загружено',

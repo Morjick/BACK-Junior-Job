@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
 import { Articles } from 'src/articles/articles.model';
 import { Vacancy } from 'src/vacancy/models/vacancy.model';
+import { Notification } from 'src/notification/models/notification.model';
 
 @Table
 export class User extends Model {
@@ -89,4 +90,7 @@ export class User extends Model {
 
   @HasMany(() => Vacancy)
   vacancy: Vacancy[];
+
+  @HasMany(() => Notification)
+  notifications: Notification[];
 }
