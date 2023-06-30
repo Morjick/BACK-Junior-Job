@@ -12,7 +12,7 @@ import {
 import { StaticService } from './static.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import getTransplit from 'src/vendor/getTransplit';
+import getTransplit from '../vendor/getTransplit';
 import { join } from 'path';
 import { ApiConsumes } from '@nestjs/swagger';
 
