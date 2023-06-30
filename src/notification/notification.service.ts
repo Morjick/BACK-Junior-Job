@@ -2,6 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Notification } from './models/notification.model';
 
+interface CreateNotification {
+  type: string;
+  userId: number;
+  body: string;
+  title?: string;
+}
+
+// interface CreateMessage {
+//   type: string;
+//   userId: number;
+//   body: string;
+//   senderId?: number;
+// }
+
 @Injectable()
 export class NotificationService {
   constructor(
@@ -9,20 +23,8 @@ export class NotificationService {
     private notificationRepository: typeof Notification,
   ) {}
 
-  async create(
-    type: string,
-    userId: number,
-    body: string,
-    title?: string,
-    senderId?: number,
-  ) {
-    return await this.notificationRepository.create({
-      type,
-      userId,
-      body,
-      title,
-      senderId,
-    });
+  async createNotification(values: CreateNotification) {
+    return await this.notificationRepository.create({ values });
   }
 
   async getMany(userId: number, res: any) {

@@ -37,12 +37,12 @@ export class ResponseService {
         autorId: autor.id,
       });
 
-      this.notificationService.create(
-        'response',
-        response.vacancy.autorId,
-        'На вашу вакансию откликнулись',
-        'Новый отклик',
-      );
+      this.notificationService.createNotification({
+        type: 'response',
+        userId: response.vacancy.autorId,
+        body: 'На вашу вакансию откликнулись',
+        title: 'Новый отклик',
+      });
 
       return res.status(200).json({
         messager: 'Отклик успешно оставлен',
