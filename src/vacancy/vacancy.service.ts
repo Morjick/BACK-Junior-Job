@@ -9,10 +9,10 @@ import { Op } from 'sequelize';
 @Injectable()
 export class VacancyService {
   constructor(
-    @InjectModel(VacancyCategory)
-    private vacancyCategoryReposity: typeof VacancyCategory,
     @InjectModel(Vacancy)
     private vacancyReposity: typeof Vacancy,
+    @InjectModel(VacancyCategory)
+    private vacancyCategoryReposity: typeof VacancyCategory,
   ) {}
 
   async createCategory(body, res) {
@@ -69,7 +69,6 @@ export class VacancyService {
   async createVacancy(body, headers, res) {
     try {
       const { id } = await getAutor(headers);
-
       const isAlreadyCategory = await this.vacancyCategoryReposity.findOne({
         where: { id: body.category },
       });
@@ -106,10 +105,35 @@ export class VacancyService {
     }
   }
 
+  async updateVacancy(vacancyId, body, headers, res) {
+    try {
+      const vacancy = await this.vacancyReposity.findByPk(vacancyId);
+      const { id } = await getAutor(headers);
+      const categoryId = body.category;
+      await vacancy.update({
+        ...body,
+        categoryId,
+        autorId: id,
+        show: true,
+      });
+
+      return res.status(200).json({
+        message: 'Успешно создана',
+        ok: true,
+        vacancy,
+      });
+    } catch (e) {
+      return res.status(501).json({
+        message: 'Неожиданная ошибка сервера',
+        ok: false,
+        error: e,
+      });
+    }
+  }
+
   async deleteVacancy(id, res) {
     try {
       await this.vacancyReposity.destroy({ where: { id } });
-
       return res.status(200).json({
         message: 'Вакансия удалена',
         ok: true,

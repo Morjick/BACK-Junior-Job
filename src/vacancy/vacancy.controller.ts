@@ -6,6 +6,7 @@ import {
   Headers,
   Param,
   Post,
+  Put,
   Query,
   Res,
   UseGuards,
@@ -38,7 +39,28 @@ export class VacancyController {
     return await this.vacancyReposity.createVacancy(body, headers, res);
   }
 
-  @Delete('delete-category/:id')
+  @Put('update-vacancy/:id')
+  @UseGuards(AdminGuard)
+  @ApiParam({ name: 'title', type: String })
+  @ApiParam({ name: 'avatar', type: String })
+  @ApiParam({ name: 'category', type: Number, description: 'Category id' })
+  @ApiParam({ name: 'show', type: Boolean })
+  @ApiQuery({ name: 'id', type: Number })
+  async updateVacancy(
+    @Body() body: any,
+    @Headers() headers,
+    @Res() res,
+    @Param() params,
+  ) {
+    return await this.vacancyReposity.updateVacancy(
+      params.id,
+      body,
+      headers,
+      res,
+    );
+  }
+
+  @Delete('delete-category')
   @UseGuards(AdminGuard)
   @ApiQuery({ name: 'id', type: Number })
   async deleteArticles(@Param() params, @Res() res) {
