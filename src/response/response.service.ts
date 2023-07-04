@@ -2,11 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { ResponseModel } from './models/response.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { getAutor } from 'src/vendor/getAutor';
+import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class ResponseService {
   constructor(
     @InjectModel(ResponseModel) private responseReposity: typeof ResponseModel,
+    private notificationService: NotificationService,
   ) {}
 
   async createResponse(body, headers, res) {
@@ -33,6 +35,13 @@ export class ResponseService {
       const response = await this.responseReposity.create({
         ...body,
         autorId: autor.id,
+      });
+
+      this.notificationService.createNotification({
+        type: 'response',
+        userId: response.vacancy.autorId,
+        body: 'На вашу вакансию откликнулись',
+        title: 'Новый отклик',
       });
 
       return res.status(200).json({

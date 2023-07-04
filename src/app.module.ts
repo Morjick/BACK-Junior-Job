@@ -15,6 +15,9 @@ import { Apeal } from './support/models/apeal.model';
 import { ResponseModule } from './response/response.module';
 import { ResponseModel } from './response/models/response.model';
 import { SettingsModule } from './settings/settings.module';
+import { StaticModule } from './static/static.module';
+import { NotificationModule } from './notification/notification.module';
+import { Notification } from './notification/models/notification.model';
 
 @Module({
   imports: [
@@ -28,7 +31,15 @@ import { SettingsModule } from './settings/settings.module';
       username: process.env.DB_USERNAME,
       password: String(process.env.DB_PASSWORD),
       database: process.env.DB_NAME,
-      models: [User, Articles, VacancyCategory, Vacancy, Apeal, ResponseModel],
+      models: [
+        User,
+        Articles,
+        VacancyCategory,
+        Vacancy,
+        Apeal,
+        ResponseModel,
+        Notification,
+      ],
       autoLoadModels: true,
       synchronize: true,
       sync: {
@@ -42,6 +53,8 @@ import { SettingsModule } from './settings/settings.module';
     SupportModule,
     ResponseModule,
     SettingsModule,
+    StaticModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
