@@ -7,13 +7,13 @@ import { Vacancy } from 'src/vacancy/models/vacancy.model';
 @Injectable()
 export class RespondService {
   constructor(
-    @InjectModel(Respond) private respondsReposity: typeof Respond,
+    @InjectModel(Respond) private respondReposity: typeof Respond,
     @InjectModel(Vacancy) private vacancyReposity: typeof Vacancy,
   ) {}
 
   async create(href, headers, res) {
     try {
-      const vacancy = await this.vacancyReposity.findOne({ where: href });
+      const vacancy = await this.vacancyReposity.findOne({ where: { href } });
       const { id } = await getAutor(headers);
       const vacId = vacancy.id;
 
@@ -25,7 +25,7 @@ export class RespondService {
         });
       }
 
-      const respond = await this.vacancyReposity.create({
+      const respond = await this.respondReposity.create({
         userId: id,
         vacancyId: vacId,
       });
@@ -47,9 +47,10 @@ export class RespondService {
 
   async deleteRespond(param, res) {
     try {
-      const { vid, uid } = param;
-      const respond = await this.respondsReposity.findOne({
-        where: { userId: uid, vacHref: vid },
+      const { uid, vid } = param;
+
+      const respond = await this.respondReposity.findOne({
+        where: { userId: uid, vacancyId: vid },
       });
 
       if (!respond) {
@@ -60,8 +61,8 @@ export class RespondService {
         });
       }
 
-      await this.respondsReposity.destroy({
-        where: { userId: uid, vacHref: vid },
+      await this.respondReposity.destroy({
+        where: { userId: uid, vacancyId: vid },
       });
 
       return res.status(200).json({
@@ -78,11 +79,11 @@ export class RespondService {
     }
   }
 
-  async getRespondsToVacancy(params, res) {
+  async getRespondsToVacancy(vid, params, res) {
     try {
-      const { vid, limit = 50, offset = 0, sort = 'new' } = params;
+      const { limit = 50, offset = 0, sort = 'new' } = params;
 
-      const responds = await this.respondsReposity.findAll({
+      const responds = await this.respondReposity.findAll({
         where: { vacancyId: vid },
         limit,
         offset,
@@ -111,11 +112,11 @@ export class RespondService {
     }
   }
 
-  async getUserResponds(params, res) {
+  async getUserResponds(uid, params, res) {
     try {
-      const { uid, limit = 50, offset = 0, sort = 'new' } = params;
+      const { limit = 50, offset = 0, sort = 'new' } = params;
 
-      const responds = await this.respondsReposity.findAll({
+      const responds = await this.respondReposity.findAll({
         where: { userId: uid },
         limit,
         offset,

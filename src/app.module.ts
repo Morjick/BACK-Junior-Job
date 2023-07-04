@@ -18,6 +18,8 @@ import { SettingsModule } from './settings/settings.module';
 import { StaticModule } from './static/static.module';
 import { NotificationModule } from './notification/notification.module';
 import { Notification } from './notification/models/notification.model';
+import { Respond } from './respond/models/respond.model';
+import { RespondModule } from './respond/respond.module';
 
 @Module({
   imports: [
@@ -37,6 +39,7 @@ import { Notification } from './notification/models/notification.model';
         VacancyCategory,
         Vacancy,
         Apeal,
+        Respond,
         ResponseModel,
         Notification,
       ],
@@ -51,6 +54,7 @@ import { Notification } from './notification/models/notification.model';
     ArticlesModule,
     VacancyModule,
     SupportModule,
+    RespondModule,
     ResponseModule,
     SettingsModule,
     StaticModule,
