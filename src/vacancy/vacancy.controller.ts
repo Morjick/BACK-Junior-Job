@@ -15,6 +15,7 @@ import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { VacancyService } from './vacancy.service';
 import { AdminGuard } from 'src/guards/admin.guards';
 import { SearchVacanciesDto } from './dto/vacancy.getVacancies-dto';
+import { UpdateVacancyDto } from './dto/vacancy.updateVacancy-dto';
 
 @ApiTags('Вакансии')
 @Controller('vacancy')
@@ -39,7 +40,7 @@ export class VacancyController {
     return await this.vacancyReposity.createVacancy(body, headers, res);
   }
 
-  @Put('update-vacancy/:id')
+  @Put('update-vacancy')
   @UseGuards(AdminGuard)
   @ApiParam({ name: 'title', type: String })
   @ApiParam({ name: 'avatar', type: String })
@@ -47,17 +48,11 @@ export class VacancyController {
   @ApiParam({ name: 'show', type: Boolean })
   @ApiQuery({ name: 'id', type: Number })
   async updateVacancy(
-    @Body() body: any,
-    @Headers() headers,
+    @Query() params,
+    @Body() dto: UpdateVacancyDto,
     @Res() res,
-    @Param() params,
   ) {
-    return await this.vacancyReposity.updateVacancy(
-      params.id,
-      body,
-      headers,
-      res,
-    );
+    return await this.vacancyReposity.updateVacancy(dto, params.id, res);
   }
 
   @Delete('delete-category')
@@ -113,9 +108,9 @@ export class VacancyController {
     return await this.vacancyReposity.searchVacancies(query, res);
   }
 
-  @Get('get-vacance/:href')
+  @Get('get-vacance')
   @ApiQuery({ name: 'href', type: String })
-  async getVacancy(@Res() res, @Param() param) {
+  async getVacancy(@Res() res, @Query() param) {
     return await this.vacancyReposity.getVacancy(param.href, res);
   }
 }
