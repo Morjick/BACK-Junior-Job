@@ -81,12 +81,11 @@ export class AuthService {
     }
   }
 
-  async authGet(id, res) {
+  async getById(id, res) {
     try {
-      const user = await this.userReposity.findOne({ where: { id } });
-
+      const user = await this.userReposity.findByPk(id);
       return res.status(200).json({
-        message: 'Категории найдены',
+        message: 'Пользователь найден',
         ok: true,
         user,
       });
@@ -269,7 +268,7 @@ export class AuthService {
         password: hashPassword,
       });
       return res.status(200).json({
-        message: 'Успешно создана',
+        message: 'Успешно обновлён',
         ok: true,
         user,
       });

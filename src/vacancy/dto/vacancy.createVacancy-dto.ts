@@ -26,9 +26,6 @@ export class CreateVacancyDto {
   @IsBoolean()
   readonly show: boolean;
 
-  @IsString()
-  readonly href: string;
-
   @IsNumber()
   readonly autorId: number;
 

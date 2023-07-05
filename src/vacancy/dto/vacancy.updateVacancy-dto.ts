@@ -15,7 +15,7 @@ export class UpdateVacancyDto {
   @ApiProperty({ example: '', description: 'Тело статьи' })
   @Length(5, 200, {
     message:
-      'Тело статьи должно иметь минимум 5 символов без спецсимволов, а максимум 200',
+      'Тело вакансии должно иметь минимум 5 символов без спецсимволов, а максимум 200',
   })
   @IsString()
   readonly avatar?: string;
@@ -26,15 +26,6 @@ export class UpdateVacancyDto {
   @IsBoolean()
   readonly show: boolean;
 
-  @IsString()
-  readonly href: string;
-
   @IsNumber()
   readonly autorId: number;
-
-  readonly author: User;
-
-  readonly category: VacancyCategory;
-
-  readonly response: ResponseModel[];
 }

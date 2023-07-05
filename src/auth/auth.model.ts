@@ -84,7 +84,7 @@ export class User extends Model {
   @Column({ type: DataType.STRING, defaultValue: 'USER' })
   role: string;
 
-  @Column({ type: DataType.STRING, defaultValue: 'LIGHT' })
+  @Column({ type: DataType.ENUM('LIGHT', 'DARK'), defaultValue: 'LIGHT' })
   theme: string;
 
   @HasMany(() => Articles)
