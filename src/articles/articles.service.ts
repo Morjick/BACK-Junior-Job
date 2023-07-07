@@ -15,7 +15,7 @@ export class ArticlesService {
   async create(data: CreateArticlesDto, headers, res) {
     try {
       const autor = await getAutor(headers);
-    
+
       if (!autor.ok) {
         return res.status(autor.status).json({
           ok: false,

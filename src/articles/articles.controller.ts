@@ -30,7 +30,7 @@ export class ArticlesController {
     return await this.articlesReposity.create(body, headers, res);
   }
 
-  @Put('update')
+  @Put('update/:id')
   @UseGuards(AdminGuard)
   @ApiParam({ name: 'title', type: String })
   @ApiParam({ name: 'body', type: String })
