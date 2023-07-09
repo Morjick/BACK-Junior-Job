@@ -79,17 +79,16 @@ export class RespondService {
     }
   }
 
-  async getRespondsToVacancy(vid, params, res) {
+  async getRespondsToVacancy(vacancyId, params, res) {
     try {
       const { offset = 0, sort = 'new' } = params;
 
       const responds = await this.respondReposity.findAll({
-        where: { vacancyId: vid },
+        where: { vacancyId },
         offset,
         order: sort == 'new' ? [['createdAt', 'ASC']] : [['createdAt', 'DESC']],
         include: { all: true },
       });
-      console.log(responds);
 
       return res.status(200).json({
         message: 'Отклики получены',
@@ -105,12 +104,12 @@ export class RespondService {
     }
   }
 
-  async getUserResponds(uid, params, res) {
+  async getUserResponds(userId, params, res) {
     try {
       const { offset = 0, sort = 'new' } = params;
 
       const responds = await this.respondReposity.findAll({
-        where: { userId: uid },
+        where: { userId },
         offset,
         order: sort == 'new' ? [['createdAt', 'ASC']] : [['createdAt', 'DESC']],
         include: { all: true },

@@ -39,7 +39,6 @@ export class RespondController {
 
   @Get('get-responds-to-vacancy/:vid')
   @ApiParam({ name: 'vacancyId', type: Number })
-  @ApiQuery({ name: 'limit', type: Number, required: false })
   @ApiQuery({ name: 'offset', type: Number, required: false })
   @ApiQuery({ name: 'sort', type: String, required: false })
   async getRespondsToVacancy(@Param() params, @Query() qparams, @Res() res) {
@@ -52,7 +51,6 @@ export class RespondController {
 
   @Get('get-user-responds/:uid')
   @ApiParam({ name: 'userId', type: Number })
-  @ApiQuery({ name: 'limit', type: Number, required: false })
   @ApiQuery({ name: 'offset', type: Number, required: false })
   @ApiQuery({ name: 'sort', type: String, required: false })
   async getUserResponds(@Param() params, @Query() qparams, @Res() res) {
