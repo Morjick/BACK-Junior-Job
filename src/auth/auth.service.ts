@@ -5,6 +5,9 @@ import { validationPassword } from 'src/vendor/validationPassword';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
+import { getAutor } from 'src/vendor/getAutor';
+import { CreateAuthDto } from './dto/auth.createAuth-dto';
+import { UpdateAuthDto } from './dto/auth.updateAuth-dto';
 
 @Injectable()
 export class AuthService {
@@ -13,10 +16,10 @@ export class AuthService {
     private readonly jwt: JwtService,
   ) {}
 
-  async singUp(body: any, res) {
+  async singUp(dto: CreateAuthDto, res) {
     try {
       const isAlreadyUser = await this.userReposity.findOne({
-        where: { email: body.email },
+        where: { email: dto.email },
       });
 
       if (isAlreadyUser) {
@@ -27,27 +30,26 @@ export class AuthService {
       }
 
       const isPasswordValid = await validationPassword(
-        body.password,
-        body.firstname,
+        dto.password,
+        dto.firstname,
       );
 
       if (!isPasswordValid.ok) {
         return res.status(300).json(isPasswordValid);
       }
-      const hashPassword = await bcrypt.hash(body.password, 10);
+      const hashPassword = await bcrypt.hash(dto.password, 10);
 
-      if (body.implication !== 'legal' && body.implication !== 'physical') {
+      if (dto.implication !== 'legal' && dto.implication !== 'physical') {
         return res.status(300).json({
           message: 'Укажите, вы физическое или юридическое лицо',
           ok: false,
         });
       }
-
       const candidate = await this.userReposity.create({
-        ...body,
+        ...dto,
         banned: false,
         password: hashPassword,
-        modarate: body.implication === 'psyhical',
+        modarate: dto.implication === 'physical',
       });
 
       const token = this.jwt.sign(
@@ -71,6 +73,23 @@ export class AuthService {
       });
     } catch (e) {
       console.warn(e);
+      return res.status(501).json({
+        message: 'Неожиданная ошибка сервера',
+        ok: false,
+        error: e,
+      });
+    }
+  }
+
+  async getById(id, res) {
+    try {
+      const user = await this.userReposity.findByPk(id);
+      return res.status(200).json({
+        message: 'Пользователь найден',
+        ok: true,
+        user,
+      });
+    } catch (e) {
       return res.status(501).json({
         message: 'Неожиданная ошибка сервера',
         ok: false,
@@ -173,9 +192,10 @@ export class AuthService {
     try {
       const user = await this.userReposity.findOne({
         where: { id },
-        include: { all: true },
+        include: ['articles'],
+        attributes: { exclude: ['password'] },
       });
-
+      delete user['password'];
       if (!user) {
         return res.status(404).json({
           message: 'Пользователь не найден',
@@ -188,6 +208,69 @@ export class AuthService {
         message: 'Пользователь найден',
         user,
         ok: true,
+      });
+    } catch (e) {
+      return res.status(501).json({
+        message: 'Неожиданная ошибка сервера',
+        ok: false,
+        error: e,
+      });
+    }
+  }
+  async updateTheme(headers, body, res) {
+    try {
+      const { id } = await getAutor(headers);
+      const user = await this.userReposity.findByPk(id);
+      await user.update({ theme: body.theme });
+      return res.status(200).json({
+        message: 'Успешно создана',
+        ok: true,
+        user,
+      });
+    } catch (e) {
+      return res.status(501).json({
+        message: 'Неожиданная ошибка сервера',
+        ok: false,
+        error: e,
+      });
+    }
+  }
+
+  async updateUser(headers, dto: UpdateAuthDto, res) {
+    try {
+      const { id } = await getAutor(headers);
+      const user = await this.userReposity.findByPk(id);
+
+      const isAlreadyUser = await this.userReposity.findOne({
+        where: { email: dto.email },
+      });
+
+      if (isAlreadyUser) {
+        return res.status(301).json({
+          message: 'Пользователь с таким email уже существует',
+          ok: false,
+        });
+      }
+
+      const isPasswordValid = await validationPassword(
+        dto.password,
+        dto.firstname,
+      );
+
+      if (!isPasswordValid.ok) {
+        return res.status(300).json(isPasswordValid);
+      }
+      const hashPassword = await bcrypt.hash(dto.password, 10);
+
+      await user.update({
+        ...dto,
+        banned: false,
+        password: hashPassword,
+      });
+      return res.status(200).json({
+        message: 'Успешно обновлён',
+        ok: true,
+        user,
       });
     } catch (e) {
       return res.status(501).json({

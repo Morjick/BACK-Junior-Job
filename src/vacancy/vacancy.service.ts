@@ -105,17 +105,10 @@ export class VacancyService {
     }
   }
 
-  async updateVacancy(vacancyId, body, headers, res) {
+  async updateVacancy(dto, vacancyId, res) {
     try {
       const vacancy = await this.vacancyReposity.findByPk(vacancyId);
-      const { id } = await getAutor(headers);
-      const categoryId = body.category;
-      await vacancy.update({
-        ...body,
-        categoryId,
-        autorId: id,
-        show: true,
-      });
+      await vacancy.update(dto);
 
       return res.status(200).json({
         message: 'Успешно создана',

@@ -8,10 +8,13 @@ import {
   Query,
   Res,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AdminGuard } from 'src/guards/admin.guards';
 import { ApiHeader, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { CreateAuthDto } from './dto/auth.createAuth-dto';
+import { UpdateAuthDto } from './dto/auth.updateAuth-dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -31,8 +34,8 @@ export class AuthController {
   @ApiParam({ name: 'inn', type: String, required: false })
   @ApiParam({ name: 'city', type: String, required: false })
   @ApiParam({ name: 'role', type: String, required: false })
-  async singUp(@Body() body: any, @Res() res) {
-    return await this.authReposity.singUp(body, res);
+  async singUp(@Body() dto: CreateAuthDto, @Res() res) {
+    return await this.authReposity.singUp(dto, res);
   }
 
   @Post('sing-in')
@@ -64,5 +67,14 @@ export class AuthController {
   @ApiQuery({ name: 'banned', type: Boolean, required: false })
   async getMany(@Query() param, @Res() res) {
     return await this.authReposity.getMany(param, res);
+  }
+
+  @Put('update-theme')
+  async updateTheme(@Headers() headers, @Body() body, @Res() res) {
+    return await this.authReposity.updateTheme(headers, body, res);
+  }
+  @Put('update-user')
+  async updateUser(@Headers() headers, @Body() dto: UpdateAuthDto, @Res() res) {
+    return await this.authReposity.updateUser(headers, dto, res);
   }
 }
