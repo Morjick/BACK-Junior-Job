@@ -11,11 +11,10 @@ export class RespondService {
     @InjectModel(Vacancy) private vacancyReposity: typeof Vacancy,
   ) {}
 
-  async create(href, headers, res) {
+  async create(href, body, headers, res) {
     try {
       const vacancy = await this.vacancyReposity.findOne({ where: { href } });
       const { id } = await getAutor(headers);
-      const vacId = vacancy.id;
 
       if (!vacancy) {
         return res.status(404).json({
@@ -27,7 +26,8 @@ export class RespondService {
 
       const respond = await this.respondReposity.create({
         userId: id,
-        vacancyId: vacId,
+        body,
+        vacancyId: vacancy.id,
       });
 
       return res.status(200).json({
@@ -47,10 +47,10 @@ export class RespondService {
 
   async deleteRespond(param, res) {
     try {
-      const { uid, vid } = param;
+      const { userId, vacancyId } = param;
 
       const respond = await this.respondReposity.findOne({
-        where: { userId: uid, vacancyId: vid },
+        where: { userId, vacancyId },
       });
 
       if (!respond) {
@@ -62,7 +62,7 @@ export class RespondService {
       }
 
       await this.respondReposity.destroy({
-        where: { userId: uid, vacancyId: vid },
+        where: { userId, vacancyId },
       });
 
       return res.status(200).json({
@@ -81,27 +81,20 @@ export class RespondService {
 
   async getRespondsToVacancy(vid, params, res) {
     try {
-      const { limit = 50, offset = 0, sort = 'new' } = params;
+      const { offset = 0, sort = 'new' } = params;
 
       const responds = await this.respondReposity.findAll({
         where: { vacancyId: vid },
-        limit,
         offset,
         order: sort == 'new' ? [['createdAt', 'ASC']] : [['createdAt', 'DESC']],
         include: { all: true },
       });
       console.log(responds);
 
-      const count = responds.length;
-      const pages = count / limit > 1 ? Math.ceil(count) / limit : 1;
-      const nextPageAvaible = pages > 1 ? true : false;
-
       return res.status(200).json({
         message: 'Отклики получены',
         ok: true,
         responds,
-        pages,
-        nextPageAvaible,
       });
     } catch (e) {
       return res.status(501).json({
@@ -114,27 +107,19 @@ export class RespondService {
 
   async getUserResponds(uid, params, res) {
     try {
-      const { limit = 50, offset = 0, sort = 'new' } = params;
+      const { offset = 0, sort = 'new' } = params;
 
       const responds = await this.respondReposity.findAll({
         where: { userId: uid },
-        limit,
         offset,
         order: sort == 'new' ? [['createdAt', 'ASC']] : [['createdAt', 'DESC']],
         include: { all: true },
       });
-      console.log(responds);
-
-      const count = responds.length;
-      const pages = count / limit > 1 ? Math.ceil(count) / limit : 1;
-      const nextPageAvaible = pages > 1 ? true : false;
 
       return res.status(200).json({
         message: 'Отклики получены',
         ok: true,
         responds,
-        pages,
-        nextPageAvaible,
       });
     } catch (e) {
       return res.status(501).json({

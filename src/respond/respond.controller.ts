@@ -18,20 +18,27 @@ export class RespondController {
 
   @Post('create/:href')
   @ApiParam({ name: 'href', type: String })
+  @ApiParam({ name: 'body', type: String })
   @ApiHeader({ name: 'Authorization', description: 'Bearer token' })
   async createRespond(@Param() params, @Headers() headers, @Res() res) {
-    return await this.respondsReposity.create(params.href, headers, res);
+    return await this.respondsReposity.create(
+      params.href,
+      params.body,
+      headers,
+      res,
+    );
   }
 
   @Delete('delete')
-  @ApiQuery({ name: 'vid', type: Number, required: true })
-  @ApiQuery({ name: 'uid', type: Number, required: true })
+  @ApiQuery({ name: 'vacancyId', type: Number, required: true })
+  @ApiQuery({ name: 'userId', type: Number, required: true })
+  @ApiHeader({ name: 'Authorization', description: 'Bearer token' })
   async deleteRespond(@Query() params, @Res() res) {
     return await this.respondsReposity.deleteRespond(params, res);
   }
 
   @Get('get-responds-to-vacancy/:vid')
-  @ApiParam({ name: 'vid', type: Number })
+  @ApiParam({ name: 'vacancyId', type: Number })
   @ApiQuery({ name: 'limit', type: Number, required: false })
   @ApiQuery({ name: 'offset', type: Number, required: false })
   @ApiQuery({ name: 'sort', type: String, required: false })
@@ -44,7 +51,7 @@ export class RespondController {
   }
 
   @Get('get-user-responds/:uid')
-  @ApiParam({ name: 'uid', type: Number })
+  @ApiParam({ name: 'userId', type: Number })
   @ApiQuery({ name: 'limit', type: Number, required: false })
   @ApiQuery({ name: 'offset', type: Number, required: false })
   @ApiQuery({ name: 'sort', type: String, required: false })

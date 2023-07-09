@@ -12,11 +12,18 @@ export class Respond extends Model {
   })
   id: number;
 
+  @ApiProperty({
+    example: 'Очень хочу работать',
+    description: 'Комментарий к отклику',
+  })
+  @Column({ type: DataType.TEXT })
+  body: string;
+
   @ApiProperty({ example: 1, description: 'ID откликнувшегося пользователя' })
   @Column({ type: DataType.INTEGER })
   userId: number;
 
-  @ApiProperty({ example: '', description: 'ID вакансии' })
+  @ApiProperty({ example: 1, description: 'ID вакансии' })
   @Column({ type: DataType.INTEGER })
   vacancyId: number;
 }
