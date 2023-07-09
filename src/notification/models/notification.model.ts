@@ -1,4 +1,4 @@
-import { User } from 'src/auth/auth.model';
+import { User } from '../../auth/auth.model';
 import {
   Model,
   Table,

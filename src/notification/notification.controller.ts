@@ -1,5 +1,5 @@
 import { Controller, Get, Headers, Response } from '@nestjs/common';
-import { getAutor } from 'src/vendor/getAutor';
+import { getAutor } from '../vendor/getAutor';
 import { NotificationService } from './notification.service';
 import { ApiHeader } from '@nestjs/swagger';
 

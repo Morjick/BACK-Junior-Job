@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Articles } from './articles.model';
-import { getAutor } from 'src/vendor/getAutor';
-import getTransplit from 'src/vendor/getTransplit';
+import { getAutor } from '../vendor/getAutor';
+import getTransplit from '../vendor/getTransplit';
 import { Op } from 'sequelize';
 import { CreateArticlesDto } from './dto/create-articles.dto';
 

@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AdminGuard } from 'src/guards/admin.guards';
+import { AdminGuard } from '../guards/admin.guards';
 import { ApiHeader, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Auth')

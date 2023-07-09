@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './auth.model';
-import { validationPassword } from 'src/vendor/validationPassword';
+import { validationPassword } from '../vendor/validationPassword';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
@@ -213,7 +213,7 @@ export class AuthService {
         offset,
         where: {
           banned,
-          name: {
+          firstname: {
             [Op.like]: `%${firstname}%`,
           },
           lastname: {
@@ -234,6 +234,24 @@ export class AuthService {
         ok: false,
         error: e,
       });
+    }
+  }
+
+  async auth(token: string) {
+    try {
+      const bearer = String(token).split[1];
+
+      const { id } = this.jwt.verify(bearer, {
+        secret: process.env.JWT_SECRET_KEY,
+      });
+
+      if (!id) {
+        return null;
+      }
+
+      return await this.userReposity.findOne({ where: { id } });
+    } catch (e) {
+      return null;
     }
   }
 }

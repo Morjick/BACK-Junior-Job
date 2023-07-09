@@ -8,9 +8,9 @@ import {
   ForeignKey,
   HasMany,
 } from 'sequelize-typescript';
-import { User } from 'src/auth/auth.model';
+import { User } from '../../auth/auth.model';
 import { VacancyCategory } from './category.model';
-import { ResponseModel } from 'src/response/models/response.model';
+import { ResponseModel } from '../../response/models/response.model';
 
 @Table
 export class Vacancy extends Model {

@@ -1,5 +1,5 @@
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/auth/auth.model';
+import { User } from '../auth/auth.model';
 
 export async function getAutor(headers: any) {
   const bearer = String(headers.authorization).split(' ')[1];

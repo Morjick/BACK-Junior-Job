@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { VacancyService } from './vacancy.service';
-import { AdminGuard } from 'src/guards/admin.guards';
+import { AdminGuard } from '../guards/admin.guards';
 import { SearchVacanciesDto } from './dto/vacancy.getVacancies-dto';
 
 @ApiTags('Вакансии')

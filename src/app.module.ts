@@ -18,6 +18,7 @@ import { SettingsModule } from './settings/settings.module';
 import { StaticModule } from './static/static.module';
 import { NotificationModule } from './notification/notification.module';
 import { Notification } from './notification/models/notification.model';
+import { SocketModel } from './notification/models/socket.model';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { Notification } from './notification/models/notification.model';
         Apeal,
         ResponseModel,
         Notification,
+        SocketModel,
       ],
       autoLoadModels: true,
       synchronize: true,

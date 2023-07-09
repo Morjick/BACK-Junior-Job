@@ -7,7 +7,7 @@ import {
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
-import { User } from 'src/auth/auth.model';
+import { User } from '../auth/auth.model';
 
 @Table
 export class Articles extends Model {

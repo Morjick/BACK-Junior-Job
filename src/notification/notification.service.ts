@@ -43,6 +43,10 @@ export class NotificationService {
       where: { userId, received: false },
     });
 
+    notifications.forEach(async (notification) => {
+      await notification.update({ received: true });
+    });
+
     return res.status(200).json({
       message: 'Уведомления найдены',
       ok: true,
