@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 import {
   Body,
   Controller,
@@ -8,6 +9,7 @@ import {
   Query,
   Res,
   UseGuards,
+  Patch,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AdminGuard } from 'src/guards/admin.guards';
@@ -65,4 +67,29 @@ export class AuthController {
   async getMany(@Query() param, @Res() res) {
     return await this.authReposity.getMany(param, res);
   }
+
+  @Patch('add-favorite-vacancy/:href')
+  @ApiParam({ name: 'href', type: String })
+  @ApiHeader({ name: 'Authorization', description: 'Bearer token' })
+  async addFavoriteVacancy(@Param() param, @Headers() headers, @Res() res) {
+    return await this.authReposity.addFavoriteVacancy(param.href, headers, res);
+  }
+
+  @Patch('add-favorite-user/:id')
+  @ApiParam({ name: 'id', type: Number })
+  @ApiHeader({ name: 'Authorization', description: 'Bearer token' })
+  async addFavoriteUser(@Param() param, @Headers() headers, @Res() res) {
+    return await this.authReposity.addFavoriteUser(param.id, headers, res);
+  }
+
+  // @Patch('delete-favorite-vacancy/:href')
+  // @ApiParam({ name: 'href', type: String })
+  // @ApiHeader({ name: 'Authorization', description: 'Bearer token' })
+  // async deleteFavoriteVacancy(@Param() param, @Headers() headers, @Res() res) {
+  //   return await this.authReposity.deleteFavoriteVacancy(
+  //     param.href,
+  //     headers,
+  //     res,
+  //   );
+  // }
 }

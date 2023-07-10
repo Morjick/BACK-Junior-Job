@@ -93,4 +93,10 @@ export class User extends Model {
 
   @HasMany(() => Notification)
   notifications: Notification[];
+
+  @Column({ type: DataType.ARRAY(DataType.INTEGER), defaultValue: [] })
+  favoriteVacancyId: number[];
+
+  @Column({ type: DataType.ARRAY(DataType.INTEGER), defaultValue: [] })
+  favoriteUserId: number[];
 }

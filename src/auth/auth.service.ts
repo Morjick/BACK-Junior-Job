@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './auth.model';
+import { Vacancy } from '../vacancy/models/vacancy.model';
 import { validationPassword } from 'src/vendor/validationPassword';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
+import { getAutor } from 'src/vendor/getAutor';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User) private userReposity: typeof User,
+    @InjectModel(Vacancy) private vacancyReposity: typeof Vacancy,
     private readonly jwt: JwtService,
   ) {}
 
@@ -236,4 +239,160 @@ export class AuthService {
       });
     }
   }
+
+  async addFavoriteVacancy(href, headers, res) {
+    try {
+      const vacancy = await this.vacancyReposity.findOne({ where: { href } });
+      const { autor } = await getAutor(headers);
+
+      if (!vacancy) {
+        return res.status(404).json({
+          message: 'Вакансия не найдена',
+          ok: false,
+          error: 'Not Found',
+        });
+      }
+
+      const { favoriteVacancyId } = autor;
+      favoriteVacancyId.push(vacancy.id);
+
+      await this.userReposity.update(
+        { favoriteVacancyId },
+        { where: { id: autor.id } },
+      );
+
+      return res.status(200).json({
+        message: 'Данные пользователя обновлены',
+        ok: true,
+        autor,
+      });
+    } catch (e) {
+      return res.status(501).json({
+        message: 'Неожиданная ошибка сервера',
+        ok: false,
+        error: '501',
+      });
+    }
+  }
+
+  async addFavoriteUser(id, headers, res) {
+    try {
+      const user = await this.userReposity.findOne({ where: { id } });
+      const { autor } = await getAutor(headers);
+
+      if (!autor) {
+        return res.status(401).json({
+          message: 'Вакансия не найдена',
+          ok: false,
+          error: 'Not Found',
+        });
+      }
+
+      if (!user) {
+        return res.status(404).json({
+          message: 'Пользователь не найден',
+          ok: false,
+          error: 'Not Found',
+        });
+      }
+
+      const { favoriteUserId } = autor;
+      favoriteUserId.push(id);
+
+      await this.userReposity.update(
+        { favoriteUserId },
+        { where: { id: autor.id } },
+      );
+
+      return res.status(200).json({
+        message: 'Данные пользователя обновлены',
+        ok: true,
+        autor,
+      });
+    } catch (e) {
+      return res.status(501).json({
+        message: 'Неожиданная ошибка сервера',
+        ok: false,
+        error: '501',
+      });
+    }
+  }
+
+  // async deleteFavoriteVacancy(href, headers, res) {
+  //   try {
+  //     const vacancy = await this.vacancyReposity.findOne({ where: { href } });
+  //     const { autor } = await getAutor(headers);
+
+  //     if (!vacancy) {
+  //       return res.status(404).json({
+  //         message: 'Вакансия не найдена',
+  //         ok: false,
+  //         error: 'Not Found',
+  //       });
+  //     }
+
+  //     const { favoriteVacancyId } = autor;
+  //     favoriteVacancyId.push(vacancy.id);
+
+  //     await this.userReposity.update(
+  //       { favoriteVacancyId },
+  //       { where: { id: autor.id } },
+  //     );
+
+  //     return res.status(200).json({
+  //       message: 'Данные пользователя обновлены',
+  //       ok: true,
+  //       autor,
+  //     });
+  //   } catch (e) {
+  //     return res.status(501).json({
+  //       message: 'Неожиданная ошибка сервера',
+  //       ok: false,
+  //       error: '501',
+  //     });
+  //   }
+  // }
+
+  // async deleteFavoriteUser(id, headers, res) {
+  //   try {
+  //     const user = await this.userReposity.findOne({ where: { id } });
+  //     const { autor } = await getAutor(headers);
+
+  //     if (!autor) {
+  //       return res.status(401).json({
+  //         message: 'Вакансия не найдена',
+  //         ok: false,
+  //         error: 'Not Found',
+  //       });
+  //     }
+
+  //     if (!user) {
+  //       return res.status(404).json({
+  //         message: 'Пользователь не найден',
+  //         ok: false,
+  //         error: 'Not Found',
+  //       });
+  //     }
+
+  //     const { favoriteUserId } = autor;
+  //     favoriteUserId.push(id);
+
+  //     await this.userReposity.update(
+  //       { favoriteUserId },
+  //       { where: { id: autor.id } },
+  //     );
+
+  //     return res.status(200).json({
+  //       message: 'Данные пользователя обновлены',
+  //       ok: true,
+  //       autor,
+  //     });
+  //   } catch (e) {
+  //     return res.status(501).json({
+  //       message: 'Неожиданная ошибка сервера',
+  //       ok: false,
+  //       error: '501',
+  //     });
+  //   }
+  // }
 }
