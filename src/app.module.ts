@@ -18,6 +18,7 @@ import { SettingsModule } from './settings/settings.module';
 import { StaticModule } from './static/static.module';
 import { NotificationModule } from './notification/notification.module';
 import { Notification } from './notification/models/notification.model';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { Notification } from './notification/models/notification.model';
     SettingsModule,
     StaticModule,
     NotificationModule,
+    FavoritesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

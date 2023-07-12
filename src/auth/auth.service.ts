@@ -217,6 +217,7 @@ export class AuthService {
       });
     }
   }
+
   async updateTheme(headers, body, res) {
     try {
       const { id } = await getAutor(headers);
@@ -296,7 +297,7 @@ export class AuthService {
         offset,
         where: {
           banned,
-          name: {
+          firstname: {
             [Op.like]: `%${firstname}%`,
           },
           lastname: {
