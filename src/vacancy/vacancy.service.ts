@@ -105,17 +105,10 @@ export class VacancyService {
     }
   }
 
-  async updateVacancy(vacancyId, body, headers, res) {
+  async updateVacancy(dto, vacancyId, res) {
     try {
       const vacancy = await this.vacancyReposity.findByPk(vacancyId);
-      const { id } = await getAutor(headers);
-      const categoryId = body.category;
-      await vacancy.update({
-        ...body,
-        categoryId,
-        autorId: id,
-        show: true,
-      });
+      await vacancy.update(dto);
 
       return res.status(200).json({
         message: 'Успешно создана',
@@ -167,7 +160,10 @@ export class VacancyService {
 
   async getVacancy(href, res) {
     try {
-      const vacancy = await this.vacancyReposity.findOne({ where: { href } });
+      const vacancy = await this.vacancyReposity.findOne({
+        where: { href },
+        include: { all: true },
+      });
 
       return res.status(200).json({
         message: 'Категории найдены',
@@ -189,9 +185,12 @@ export class VacancyService {
       if (category) {
         vacancy = await this.vacancyReposity.findAll({
           where: { categoryId: category },
+          include: { all: true },
         });
       } else {
-        vacancy = await this.vacancyReposity.findAll();
+        vacancy = await this.vacancyReposity.findAll({
+          include: { all: true },
+        });
       }
 
       return res.status(200).json({

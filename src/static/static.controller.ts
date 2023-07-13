@@ -12,7 +12,6 @@ import {
 import { StaticService } from './static.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import getTransplit from 'src/vendor/getTransplit';
 import { join } from 'path';
 import { ApiConsumes } from '@nestjs/swagger';
 
@@ -37,9 +36,8 @@ export class StaticController {
             .split('.')[0]
             .split(' ')
             .join('-');
-          const transplitName = await getTransplit(originalname);
           const date = Date.now();
-          const name = `${transplitName}-${date}.${
+          const name = `${originalname}-${date}.${
             file.originalname.split('.')[1]
           }`;
 

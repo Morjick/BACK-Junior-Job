@@ -21,6 +21,7 @@ import { Notification } from './notification/models/notification.model';
 import { SocketModel } from './message/models/socket.model';
 import { MessageModule } from './message/message.module';
 import { Message } from './message/models/message.model';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { Message } from './message/models/message.model';
     StaticModule,
     NotificationModule,
     MessageModule,
+    FavoritesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

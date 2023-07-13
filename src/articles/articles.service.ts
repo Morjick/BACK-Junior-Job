@@ -72,9 +72,8 @@ export class ArticlesService {
     }
   }
 
-  async updateArticle(data, res) {
+  async updateArticle(id, body, res) {
     try {
-      const { id } = data;
       if (!id) {
         return res.status(401).json({
           message: 'Передайте в тело запроса уникальный идентификатор статьи',
@@ -82,7 +81,7 @@ export class ArticlesService {
           error: 'BadReauest',
         });
       }
-      const article = await this.articlesReposity.findOne({ where: { id } });
+      const article = await this.articlesReposity.findByPk(id);
 
       if (!article) {
         return res.status(404).json({
@@ -92,11 +91,7 @@ export class ArticlesService {
         });
       }
 
-      const update = { ...article, data };
-      const updatedArticle = await this.articlesReposity.update(
-        { update },
-        { where: { id } },
-      );
+      const updatedArticle = await article.update(body);
 
       return res.status(200).json({
         message: 'Продукт обновлён',

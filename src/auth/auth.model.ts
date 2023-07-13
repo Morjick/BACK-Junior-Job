@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  HasMany,
+  ForeignKey,
+} from 'sequelize-typescript';
 import { Articles } from 'src/articles/articles.model';
 import { Vacancy } from 'src/vacancy/models/vacancy.model';
 import { Notification } from 'src/notification/models/notification.model';
@@ -87,6 +94,9 @@ export class User extends Model {
   @Column({ type: DataType.STRING, defaultValue: 'USER' })
   role: string;
 
+  @Column({ type: DataType.ENUM('LIGHT', 'DARK'), defaultValue: 'LIGHT' })
+  theme: string;
+
   @HasMany(() => Articles)
   articles: Articles[];
 
@@ -101,4 +111,11 @@ export class User extends Model {
 
   @HasMany(() => Message)
   messages: Message[];
+
+  @HasMany(() => Vacancy)
+  favoritesVacancy: Vacancy[];
+
+  @ForeignKey(() => Vacancy)
+  @Column({ type: DataType.ARRAY(DataType.INTEGER) })
+  favoritesVacancyId: number[];
 }

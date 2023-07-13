@@ -55,6 +55,10 @@ export class Vacancy extends Model {
   @BelongsTo(() => VacancyCategory)
   category: VacancyCategory;
 
+  @ForeignKey(() => VacancyCategory)
+  @Column({ type: DataType.ARRAY(DataType.INTEGER) })
+  responseId: number[];
+
   @HasMany(() => ResponseModel)
   response: ResponseModel[];
 }
