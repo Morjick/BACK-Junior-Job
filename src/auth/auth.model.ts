@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
-import { Articles } from '../articles/articles.model';
-import { Vacancy } from '../vacancy/models/vacancy.model';
-import { Notification } from '../notification/models/notification.model';
-import { SocketModel } from '../notification/models/socket.model';
+import { Articles } from 'src/articles/articles.model';
+import { Vacancy } from 'src/vacancy/models/vacancy.model';
+import { Notification } from 'src/notification/models/notification.model';
+import { SocketModel } from 'src/message/models/socket.model';
+import { Message } from 'src/message/models/message.model';
 
 @Table
 export class User extends Model {
@@ -97,4 +98,7 @@ export class User extends Model {
 
   @HasMany(() => SocketModel)
   sockets: SocketModel[];
+
+  @HasMany(() => Message)
+  messages: Message[];
 }

@@ -3,16 +3,13 @@ import { NotificationService } from './notification.service';
 import { NotificationController } from './notification.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Notification } from './models/notification.model';
-import { NotificationGateway } from './notification.gateway';
-import { AuthModule } from '../auth/auth.module';
-import { SocketModel } from './models/socket.model';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  providers: [NotificationService, NotificationGateway],
+  providers: [NotificationService],
   controllers: [NotificationController],
   imports: [
-    SequelizeModule.forFeature([Notification, SocketModel]),
-    AuthModule,
+    SequelizeModule.forFeature([Notification]),
   ],
   exports: [NotificationService],
 })

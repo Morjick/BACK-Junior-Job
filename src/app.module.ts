@@ -18,7 +18,9 @@ import { SettingsModule } from './settings/settings.module';
 import { StaticModule } from './static/static.module';
 import { NotificationModule } from './notification/notification.module';
 import { Notification } from './notification/models/notification.model';
-import { SocketModel } from './notification/models/socket.model';
+import { SocketModel } from './message/models/socket.model';
+import { MessageModule } from './message/message.module';
+import { Message } from './message/models/message.model';
 
 @Module({
   imports: [
@@ -41,6 +43,7 @@ import { SocketModel } from './notification/models/socket.model';
         ResponseModel,
         Notification,
         SocketModel,
+        Message,
       ],
       autoLoadModels: true,
       synchronize: true,
@@ -57,6 +60,7 @@ import { SocketModel } from './notification/models/socket.model';
     SettingsModule,
     StaticModule,
     NotificationModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

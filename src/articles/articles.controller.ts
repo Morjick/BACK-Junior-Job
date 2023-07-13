@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ArticlesService } from './articles.service';
-import { AdminGuard } from '../guards/admin.guards';
+import { AdminGuard } from 'src/guards/admin.guards';
 
 @ApiTags('Статьи')
 @Controller('articles')

@@ -9,9 +9,10 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { InjectModel } from '@nestjs/sequelize';
-import { Notification } from './models/notification.model';
-import { getUserByToken } from '../vendor/getUserByToken';
+import { getUserByToken } from 'src/vendor/getUserByToken';
 import { SocketModel } from './models/socket.model';
+import { ApiTags } from '@nestjs/swagger';
+import { Message } from './models/message.model';
 
 interface InitPayload {
   authorization: string;
@@ -22,14 +23,19 @@ interface MessagePayload {
   body: string;
 }
 
+interface Error {
+  message: string
+}
+
+@ApiTags('Socket')
 @WebSocketGateway()
-export class NotificationGateway
+export class MessageGateway
   implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
 {
   constructor(
     @InjectModel(SocketModel) private socketRepository: typeof SocketModel,
-    @InjectModel(Notification)
-    private notificationRepository: typeof Notification,
+    @InjectModel(Message)
+    private messageRepository: typeof Message,
   ) {}
 
   @WebSocketServer()
@@ -51,28 +57,30 @@ export class NotificationGateway
     this.logger.log('client disconnected');
   }
 
-  private async getUserBySocket(socket: Socket) {
-    return (
-      await this.socketRepository.findOne({
-        where: { socketId: socket.id },
-      })
-    ).userId;
+  private sendError(socket: Socket, error: Error) {
+    socket.emit('error', error)
+  }
+
+  private async getUserBySocket(socket: Socket, clientSocket: Socket) {
+    const userSocket = await this.socketRepository.findOne({ where: { socketId: socket.id } })
+
+    if(!userSocket) {
+      this.sendError(clientSocket, {message: 'Пользователь не найден'})
+    }
+
+    return userSocket.userId;
   }
 
   private async getSocketsByUserId(id: number) {
     const userSockets = await this.socketRepository.findAll({
       where: { userId: id },
     });
-    const sockets: Socket[] = [];
-
-    if (!userSockets) {
-      return null;
-    }
+    let sockets: Socket[] = [];
 
     userSockets.forEach((userSocket) => {
       const socket = this.server.sockets.sockets.get(userSocket.socketId);
 
-      if (socket != undefined) {
+      if (socket) {
         sockets.push(socket);
       }
     });
@@ -82,7 +90,7 @@ export class NotificationGateway
 
   @SubscribeMessage('init')
   async handleInit(socket: Socket, payload: InitPayload) {
-    const user = await getUserByToken(payload.authorization);
+    const { user } = await getUserByToken(payload.authorization);
 
     if (!user) {
       socket.emit('error', { message: 'Необходимо передать токен' });
@@ -99,10 +107,9 @@ export class NotificationGateway
 
   @SubscribeMessage('message')
   async handleMessage(socket: Socket, payload: MessagePayload) {
-    const senderId = await this.getUserBySocket(socket);
+    const senderId = await this.getUserBySocket(socket, socket);
 
-    const notification = await this.notificationRepository.create({
-      type: 'message',
+    const message = await this.messageRepository.create({
       userId: payload.userId,
       body: payload.body,
       senderId,
@@ -115,7 +122,7 @@ export class NotificationGateway
     });
 
     if (userSockets[0]) {
-      await notification.update({ received: true });
+      await message.update({ received: true });
     }
   }
 }

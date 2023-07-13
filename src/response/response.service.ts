@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ResponseModel } from './models/response.model';
 import { InjectModel } from '@nestjs/sequelize';
-import { getAutor } from '../vendor/getAutor';
-import { NotificationService } from '../notification/notification.service';
+import { getAutor } from 'src/vendor/getAutor';
+import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class ResponseService {

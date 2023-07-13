@@ -10,7 +10,7 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 
 @Table
-export class Notification extends Model {
+export class Message extends Model {
   @ApiProperty({ example: 1, description: 'Уникальный идентификатор' })
   @Column({
     type: DataType.INTEGER,
@@ -30,8 +30,11 @@ export class Notification extends Model {
   @BelongsTo(() => User)
   user: User;
 
-  @Column({ type: DataType.STRING, defaultValue: null })
-  title: string;
+  @Column({ type: DataType.INTEGER, defaultValue: null })
+  senderId: number;
+
+  @Column({ type: DataType.BOOLEAN, defaultValue: false })
+  received: boolean;
 
   @Column({ type: DataType.STRING })
   body: string;

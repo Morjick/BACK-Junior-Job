@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { VacancyCategory } from './models/category.model';
-import getTransplit from '../vendor/getTransplit';
-import { getAutor } from '../vendor/getAutor';
+import getTransplit from 'src/vendor/getTransplit';
+import { getAutor } from 'src/vendor/getAutor';
 import { Vacancy } from './models/vacancy.model';
 import { Op } from 'sequelize';
 
