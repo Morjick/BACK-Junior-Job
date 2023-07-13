@@ -24,7 +24,7 @@ interface MessagePayload {
 }
 
 interface Error {
-  message: string
+  message: string;
 }
 
 @ApiTags('Socket')
@@ -58,14 +58,16 @@ export class MessageGateway
   }
 
   private sendError(socket: Socket, error: Error) {
-    socket.emit('error', error)
+    socket.emit('error', error);
   }
 
   private async getUserBySocket(socket: Socket, clientSocket: Socket) {
-    const userSocket = await this.socketRepository.findOne({ where: { socketId: socket.id } })
+    const userSocket = await this.socketRepository.findOne({
+      where: { socketId: socket.id },
+    });
 
-    if(!userSocket) {
-      this.sendError(clientSocket, {message: 'Пользователь не найден'})
+    if (!userSocket) {
+      this.sendError(clientSocket, { message: 'Пользователь не найден' });
     }
 
     return userSocket.userId;
@@ -75,7 +77,7 @@ export class MessageGateway
     const userSockets = await this.socketRepository.findAll({
       where: { userId: id },
     });
-    let sockets: Socket[] = [];
+    const sockets: Socket[] = [];
 
     userSockets.forEach((userSocket) => {
       const socket = this.server.sockets.sockets.get(userSocket.socketId);

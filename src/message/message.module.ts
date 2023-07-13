@@ -9,8 +9,11 @@ import { MessageService } from './message.service';
 import { MessageController } from './message.controller';
 
 @Module({
-    imports: [SequelizeModule.forFeature([Message, SocketModel, User]), AuthModule],
-    providers: [MessageGateway, MessageService],
-    controllers: [MessageController]
+  imports: [
+    SequelizeModule.forFeature([Message, SocketModel, User]),
+    AuthModule,
+  ],
+  providers: [MessageGateway, MessageService],
+  controllers: [MessageController],
 })
 export class MessageModule {}

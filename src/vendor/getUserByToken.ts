@@ -7,7 +7,7 @@ export async function getUserByToken(token: string) {
 
   if (!bearer) {
     return {
-      ok: false
+      ok: false,
     };
   }
 
@@ -17,5 +17,5 @@ export async function getUserByToken(token: string) {
 
   const user = await User.findOne({ where: { id } });
 
-  return {ok: true, user};
+  return { ok: true, user };
 }

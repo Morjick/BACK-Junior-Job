@@ -1,6 +1,6 @@
-import { IsNumber } from "class-validator";
+import { IsNumber } from 'class-validator';
 
 export class GetMessageDto {
-    @IsNumber()
-    senderId: number
+  @IsNumber()
+  senderId: number;
 }
