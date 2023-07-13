@@ -39,8 +39,8 @@ describe('Chat connection', () => {
       });
     });
 
-    socket1.on('error', (message) => {
-      console.error(message.message);
+    socket1.on('error', (error) => {
+      console.error(error.message);
     });
 
     socket1.on('init', () => {
