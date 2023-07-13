@@ -6,7 +6,7 @@ import {
   BelongsTo,
   ForeignKey,
 } from 'sequelize-typescript';
-import { User } from '../../auth/auth.model';
+import { User } from 'src/auth/auth.model';
 
 @Table
 export class SocketModel extends Model {

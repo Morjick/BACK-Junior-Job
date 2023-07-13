@@ -236,22 +236,4 @@ export class AuthService {
       });
     }
   }
-
-  async auth(token: string) {
-    try {
-      const bearer = String(token).split[1];
-
-      const { id } = this.jwt.verify(bearer, {
-        secret: process.env.JWT_SECRET_KEY,
-      });
-
-      if (!id) {
-        return null;
-      }
-
-      return await this.userReposity.findOne({ where: { id } });
-    } catch (e) {
-      return null;
-    }
-  }
 }
