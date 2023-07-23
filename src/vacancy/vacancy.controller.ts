@@ -55,7 +55,7 @@ export class VacancyController {
     return await this.vacancyReposity.updateVacancy(dto, params.id, res);
   }
 
-  @Delete('delete-category')
+  @Delete('delete-category/:id')
   @UseGuards(AdminGuard)
   @ApiQuery({ name: 'id', type: Number })
   async deleteArticles(@Param() params, @Res() res) {

@@ -51,6 +51,7 @@ export class VacancyService {
 
   async deleteCategory(id, res) {
     try {
+      await this.vacancyReposity.destroy({ where: { categoryId: id } });
       await this.vacancyCategoryReposity.destroy({ where: { id } });
 
       return res.status(200).json({
