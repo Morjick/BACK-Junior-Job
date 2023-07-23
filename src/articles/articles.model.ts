@@ -25,7 +25,7 @@ export class Articles extends Model {
   title: string;
 
   @ApiProperty({ example: 'matvey-khramov@inbox.ru', description: 'Email' })
-  @Column({ type: DataType.STRING })
+  @Column({ type: DataType.TEXT })
   body: string;
 
   @ApiProperty({ example: 'matvey-khramov@inbox.ru', description: 'Email' })
