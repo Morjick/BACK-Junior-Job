@@ -69,6 +69,11 @@ export class AuthController {
     return await this.authReposity.getMany(param, res);
   }
 
+  @Get('get-porson/:id')
+  async getPerson(@Param() param, @Res() res) {
+    return await this.authReposity.getPersonalInfo(param.id, res);
+  }
+
   @Put('update-theme')
   async updateTheme(@Headers() headers, @Body() body, @Res() res) {
     return await this.authReposity.updateTheme(headers, body, res);

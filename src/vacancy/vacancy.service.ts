@@ -5,6 +5,9 @@ import getTransplit from 'src/vendor/getTransplit';
 import { getAutor } from 'src/vendor/getAutor';
 import { Vacancy } from './models/vacancy.model';
 import { Op } from 'sequelize';
+import { SetExecutorDto } from './dto/vacancy.setExecutor.dto';
+import { User } from 'src/auth/auth.model';
+import { ResponseModel } from 'src/response/models/response.model';
 
 @Injectable()
 export class VacancyService {
@@ -13,6 +16,10 @@ export class VacancyService {
     private vacancyReposity: typeof Vacancy,
     @InjectModel(VacancyCategory)
     private vacancyCategoryReposity: typeof VacancyCategory,
+    @InjectModel(User)
+    private userReposity: typeof User,
+    @InjectModel(ResponseModel)
+    private responseReposity: typeof ResponseModel,
   ) {}
 
   async createCategory(body, res) {
@@ -166,10 +173,15 @@ export class VacancyService {
         include: { all: true },
       });
 
+      const reseponses = await this.responseReposity.findAll({
+        where: { id: vacancy.id },
+      });
+
       return res.status(200).json({
         message: 'Категории найдены',
         ok: true,
         vacancy,
+        reseponses,
       });
     } catch (e) {
       return res.status(501).json({
@@ -222,15 +234,52 @@ export class VacancyService {
         limit,
         offset,
         where: category
-          ? { category, title: { [Op.like]: `%${title}%` } }
+          ? { categoryId: category, title: { [Op.like]: `%${title}%` } }
           : { title: { [Op.like]: `%${title}%` } },
         order: [[sortColumn, sortBy]],
+        include: { all: true },
       });
 
       return res.status(200).json({
         message: 'Вакансии найдены',
         ok: true,
         vacancies,
+      });
+    } catch (e) {
+      return res.status(501).json({
+        message: 'Неожиданная ошибка сервера',
+        ok: false,
+        error: e,
+      });
+    }
+  }
+
+  async setExecutor(body: SetExecutorDto, headers, res) {
+    try {
+      const autor = await getAutor(headers);
+
+      const vacancy = await this.vacancyReposity.findOne({
+        where: { id: body.vacancyId },
+      });
+
+      if (autor.id !== vacancy.autorId) {
+        return res.status(301).json({
+          message: 'Вы можете выбирать пользователя только на свою вакансию',
+          ok: false,
+          error: 'NotImplimintation',
+        });
+      }
+
+      const executor = await this.userReposity.findOne({
+        where: { id: body.executorId },
+      });
+
+      vacancy.set('executorId', executor.id);
+      vacancy.set('open', false);
+
+      return res.status(200).json({
+        message: 'Испольнитель выбран',
+        ok: true,
       });
     } catch (e) {
       return res.status(501).json({

@@ -320,4 +320,49 @@ export class AuthService {
       });
     }
   }
+
+  async getPersonalInfo(id: number, res: any) {
+    try {
+      if (!id) {
+        return res.status(304).json({
+          message: 'Не передан обязательный параметр',
+          ok: false,
+          error: 'required field',
+        });
+      }
+      const user = await this.userReposity.findOne({
+        where: { id },
+        include: [
+          'firstname',
+          'lastname',
+          'age',
+          'avatar',
+          'implication',
+          'learn',
+          'city',
+          'vacancy',
+        ],
+      });
+
+      if (!user) {
+        return res.status(404).json({
+          message: 'Пользователь не найден',
+          ok: false,
+          error: 'NotFound',
+        });
+      }
+
+      return res.status(200).json({
+        message: 'Данные о пользователе получены',
+        ok: true,
+        user,
+      });
+    } catch (e) {
+      return res.status(501).json({
+        message: 'Неожиданная ошибка сервера',
+        ok: false,
+        error: e,
+      });
+    }
+  }
 }

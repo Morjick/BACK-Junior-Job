@@ -41,12 +41,22 @@ export class Vacancy extends Model {
   @Column({ type: DataType.BOOLEAN })
   show: boolean;
 
+  @Column({ type: DataType.BOOLEAN, defaultValue: true })
+  open: boolean;
+
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER })
   autorId: number;
 
   @BelongsTo(() => User)
   author: User;
+
+  @ForeignKey(() => User)
+  @Column({ type: DataType.INTEGER })
+  executorId: number;
+
+  @BelongsTo(() => User)
+  executor: User;
 
   @ForeignKey(() => VacancyCategory)
   @Column({ type: DataType.INTEGER })

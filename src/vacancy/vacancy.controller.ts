@@ -16,6 +16,7 @@ import { VacancyService } from './vacancy.service';
 import { AdminGuard } from 'src/guards/admin.guards';
 import { SearchVacanciesDto } from './dto/vacancy.getVacancies-dto';
 import { UpdateVacancyDto } from './dto/vacancy.updateVacancy-dto';
+import { SetExecutorDto } from './dto/vacancy.setExecutor.dto';
 
 @ApiTags('Вакансии')
 @Controller('vacancy')
@@ -38,6 +39,17 @@ export class VacancyController {
   @ApiParam({ name: 'show', type: Boolean })
   async createVacancy(@Body() body: any, @Headers() headers, @Res() res) {
     return await this.vacancyReposity.createVacancy(body, headers, res);
+  }
+
+  @Post('set-executor')
+  @ApiParam({ name: 'vacancyId', type: Number })
+  @ApiParam({ name: 'executorId', type: Number })
+  async setExecutor(
+    @Body() body: SetExecutorDto,
+    @Headers() headers,
+    @Res() res,
+  ) {
+    return await this.vacancyReposity.setExecutor(body, headers, res);
   }
 
   @Put('update-vacancy')

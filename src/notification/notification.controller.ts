@@ -1,8 +1,9 @@
 import { Controller, Get, Headers, Response } from '@nestjs/common';
 import { getAutor } from 'src/vendor/getAutor';
 import { NotificationService } from './notification.service';
-import { ApiHeader } from '@nestjs/swagger';
+import { ApiHeader, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Уведомления')
 @Controller('notification')
 export class NotificationController {
   constructor(private notificationRepository: NotificationService) {}
