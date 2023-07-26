@@ -274,8 +274,6 @@ export class VacancyService {
         where: { id: body.executorId },
       });
 
-      // vacancy.set('executorId', executor.id);
-      // vacancy.set('open', false);
       await this.vacancyReposity.update(
         {
           executorId: executor.id,

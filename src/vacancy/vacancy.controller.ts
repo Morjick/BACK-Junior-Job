@@ -32,7 +32,6 @@ export class VacancyController {
   }
 
   @Post('create-vacancy')
-  @UseGuards(AdminGuard)
   @ApiParam({ name: 'title', type: String })
   @ApiParam({ name: 'avatar', type: String })
   @ApiParam({ name: 'category', type: Number, description: 'Category id' })

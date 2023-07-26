@@ -16,7 +16,7 @@ export class ResponseController {
   constructor(private responseReposity: ResponseService) {}
 
   @Post('create')
-  @ApiParam({ name: 'vacancyId', type: Number })
+  @ApiParam({ name: 'targetId', type: Number })
   @ApiParam({ name: 'body', type: String })
   @ApiHeader({ name: 'Authorization', description: 'Bearer token' })
   async create(@Body() body: any, @Headers() headers, @Res() res) {
