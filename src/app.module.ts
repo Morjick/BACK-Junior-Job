@@ -18,6 +18,9 @@ import { SettingsModule } from './settings/settings.module';
 import { StaticModule } from './static/static.module';
 import { NotificationModule } from './notification/notification.module';
 import { Notification } from './notification/models/notification.model';
+import { SocketModel } from './message/models/socket.model';
+import { MessageModule } from './message/message.module';
+import { Message } from './message/models/message.model';
 import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
@@ -40,6 +43,8 @@ import { FavoritesModule } from './favorites/favorites.module';
         Apeal,
         ResponseModel,
         Notification,
+        SocketModel,
+        Message,
       ],
       autoLoadModels: true,
       synchronize: true,
@@ -56,6 +61,7 @@ import { FavoritesModule } from './favorites/favorites.module';
     SettingsModule,
     StaticModule,
     NotificationModule,
+    MessageModule,
     FavoritesModule,
   ],
   controllers: [AppController],

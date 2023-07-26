@@ -10,6 +10,8 @@ import {
 import { Articles } from 'src/articles/articles.model';
 import { Vacancy } from 'src/vacancy/models/vacancy.model';
 import { Notification } from 'src/notification/models/notification.model';
+import { SocketModel } from 'src/message/models/socket.model';
+import { Message } from 'src/message/models/message.model';
 
 @Table
 export class User extends Model {
@@ -103,6 +105,12 @@ export class User extends Model {
 
   @HasMany(() => Notification)
   notifications: Notification[];
+
+  @HasMany(() => SocketModel)
+  sockets: SocketModel[];
+
+  @HasMany(() => Message)
+  messages: Message[];
 
   @HasMany(() => Vacancy)
   favoritesVacancy: Vacancy[];

@@ -15,12 +15,4 @@ export class NotificationController {
 
     return await this.notificationRepository.getMany(user.id, res);
   }
-
-  @ApiHeader({ name: 'Authorization' })
-  @Get('get-unreceived')
-  async getReceived(@Headers() headers, @Response() res) {
-    const user = await getAutor(headers);
-
-    return await this.notificationRepository.getUnreceived(user.id, res);
-  }
 }

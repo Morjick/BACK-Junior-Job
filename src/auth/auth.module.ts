@@ -11,5 +11,6 @@ import { Vacancy } from 'src/vacancy/models/vacancy.model';
   controllers: [AuthController],
   providers: [AuthService, JwtService],
   imports: [SequelizeModule.forFeature([User, Articles, Vacancy])],
+  exports: [AuthService],
 })
 export class AuthModule {}

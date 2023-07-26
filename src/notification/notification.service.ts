@@ -9,13 +9,6 @@ interface CreateNotification {
   title?: string;
 }
 
-// interface CreateMessage {
-//   type: string;
-//   userId: number;
-//   body: string;
-//   senderId?: number;
-// }
-
 @Injectable()
 export class NotificationService {
   constructor(
@@ -31,18 +24,6 @@ export class NotificationService {
     const notifications = await this.notificationRepository.findAll({
       where: { userId },
     });
-    return res.status(200).json({
-      message: 'Уведомления найдены',
-      ok: true,
-      notifications,
-    });
-  }
-
-  async getUnreceived(userId: number, res: any) {
-    const notifications = await this.notificationRepository.findAll({
-      where: { userId, received: false },
-    });
-
     return res.status(200).json({
       message: 'Уведомления найдены',
       ok: true,
