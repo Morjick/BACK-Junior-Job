@@ -72,7 +72,7 @@ export class ResponseService {
       const { targetId } = params;
 
       const responses = await this.responseReposity.findAll({
-        where: { id: targetId },
+        where: { vacancyId: targetId },
         include: { all: true },
       });
 

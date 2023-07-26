@@ -13,8 +13,9 @@ import { StaticService } from './static.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { join } from 'path';
-import { ApiConsumes } from '@nestjs/swagger';
+import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Статика')
 @Controller('static')
 export class StaticController {
   constructor(private staticRepository: StaticService) {}

@@ -104,7 +104,6 @@ export class VacancyService {
         vacancy,
       });
     } catch (e) {
-      console.log(e);
       return res.status(501).json({
         message: 'Неожиданная ошибка сервера',
         ok: false,
@@ -174,7 +173,8 @@ export class VacancyService {
       });
 
       const reseponses = await this.responseReposity.findAll({
-        where: { id: vacancy.id },
+        where: { vacancyId: vacancy.id },
+        include: { all: true },
       });
 
       return res.status(200).json({
@@ -274,8 +274,15 @@ export class VacancyService {
         where: { id: body.executorId },
       });
 
-      vacancy.set('executorId', executor.id);
-      vacancy.set('open', false);
+      // vacancy.set('executorId', executor.id);
+      // vacancy.set('open', false);
+      await this.vacancyReposity.update(
+        {
+          executorId: executor.id,
+          open: false,
+        },
+        { where: { id: vacancy.id } },
+      );
 
       return res.status(200).json({
         message: 'Испольнитель выбран',

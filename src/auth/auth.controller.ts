@@ -69,7 +69,7 @@ export class AuthController {
     return await this.authReposity.getMany(param, res);
   }
 
-  @Get('get-porson/:id')
+  @Get('get-person/:id')
   async getPerson(@Param() param, @Res() res) {
     return await this.authReposity.getPersonalInfo(param.id, res);
   }

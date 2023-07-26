@@ -332,16 +332,19 @@ export class AuthService {
       }
       const user = await this.userReposity.findOne({
         where: { id },
-        include: [
-          'firstname',
-          'lastname',
-          'age',
-          'avatar',
-          'implication',
-          'learn',
-          'city',
-          'vacancy',
-        ],
+        attributes: {
+          exclude: [
+            'password',
+            'modarate',
+            'modarator',
+            'inn',
+            'role',
+            'theme',
+            'favoritesVacancyId',
+            'birsday',
+            'updatedAt',
+          ],
+        },
       });
 
       if (!user) {
