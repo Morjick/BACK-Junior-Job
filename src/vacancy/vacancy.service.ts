@@ -235,7 +235,7 @@ export class VacancyService {
         offset,
         where: category
           ? { categoryId: category, title: { [Op.like]: `%${title}%` } }
-          : { title: { [Op.like]: `%${title}%` } },
+          : { title: { [Op.iLike]: `%${title}%` } },
         order: [[sortColumn, sortBy]],
         include: { all: true },
       });
